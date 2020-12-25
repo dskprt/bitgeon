@@ -1,0 +1,83 @@
+package com.github.dskprt.bitgeon.gui.screens;
+
+import com.github.dskprt.bitgeon.BitgeonGame;
+import com.github.dskprt.bitgeon.gui.Screen;
+import com.github.dskprt.bitgeon.gui.components.Label;
+import com.github.dskprt.bitgeon.input.Keyboard;
+import com.github.dskprt.bitgeon.util.FontUtil;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
+
+public class TitleScreen extends Screen {
+
+    private int selection = 0;
+    private int maxSelection = 2;
+
+    @Override
+    public void init() {
+        components.clear();
+
+        Font titleFont = BitgeonGame.INSTANCE.font.deriveFont(36f);
+        Rectangle2D titleRect = FontUtil.getStringBounds("bitgeon", titleFont);
+
+        Font optionFont = BitgeonGame.INSTANCE.font.deriveFont(24f);
+
+        components.add(new Label(this, "bitgeon",
+                BitgeonGame.INSTANCE.canvas.getWidth() / 2 - (int) titleRect.getWidth() / 2,
+                100, Color.WHITE, titleFont));
+
+        String op0 = selection == 0 ? "> Play <" : "Play";
+        String op1 = selection == 1 ? "> Options <" : "Options";
+        String op2 = selection == 2 ? "> Quit <" : "Quit";
+
+        components.add(new Label(this, op0,
+                BitgeonGame.INSTANCE.canvas.getWidth() / 2 - (int) FontUtil.getStringBounds(op0, optionFont).getWidth() / 2,
+                350, selection == 0 ? Color.GRAY : Color.WHITE, optionFont));
+        components.add(new Label(this, op1,
+                BitgeonGame.INSTANCE.canvas.getWidth() / 2 - (int) FontUtil.getStringBounds(op1, optionFont).getWidth() / 2,
+                375, selection == 1 ? Color.GRAY : Color.WHITE, optionFont));
+        components.add(new Label(this, op2,
+                BitgeonGame.INSTANCE.canvas.getWidth() / 2 - (int) FontUtil.getStringBounds(op2, optionFont).getWidth() / 2,
+                400, selection == 2 ? Color.GRAY : Color.WHITE, optionFont));
+
+        super.init();
+    }
+
+    @Override
+    public void update(int delta) {
+        if(Keyboard.wasKeyClicked(KeyEvent.VK_UP)) {
+            if(selection - 1 < 0) {
+                selection = maxSelection;
+            } else {
+                selection--;
+            }
+
+            init();
+        } else if(Keyboard.wasKeyClicked(KeyEvent.VK_DOWN)) {
+            if(selection + 1 > maxSelection) {
+                selection = 0;
+            } else {
+                selection++;
+            }
+
+            init();
+        } else if(Keyboard.wasKeyClicked(KeyEvent.VK_ENTER)) {
+            switch(selection) {
+                case 0:
+                    System.out.println("Play");
+                    break;
+                case 1:
+                    System.out.println("Options");
+                    break;
+                case 2:
+                    System.out.println("Quit");
+                    System.exit(0);
+                    break;
+            }
+        }
+
+        super.update(delta);
+    }
+}
