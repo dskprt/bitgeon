@@ -7,10 +7,10 @@ public class Keyboard implements KeyListener {
 
     private static final int KEY_COUNT = 256;
 
-    private static boolean[] currentKeys = null;
-    private static KeyState[] keys = null;
+    private static final boolean[] currentKeys;
+    private static final KeyState[] keys;
 
-    public Keyboard() {
+    static {
         currentKeys = new boolean[KEY_COUNT];
         keys = new KeyState[KEY_COUNT];
 
@@ -43,7 +43,7 @@ public class Keyboard implements KeyListener {
     }
 
     @Override
-    public synchronized void keyPressed( KeyEvent e ) {
+    public synchronized void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
         if(keyCode >= 0 && keyCode < KEY_COUNT) {
@@ -61,7 +61,8 @@ public class Keyboard implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) { }
+    public void keyTyped(KeyEvent e) {
+    }
 
     public enum KeyState {
         RELEASED,

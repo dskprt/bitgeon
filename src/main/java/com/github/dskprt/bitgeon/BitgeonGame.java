@@ -2,6 +2,7 @@ package com.github.dskprt.bitgeon;
 
 import com.github.dskprt.bitgeon.config.GameConfiguration;
 import com.github.dskprt.bitgeon.input.Keyboard;
+import com.github.dskprt.bitgeon.input.Mouse;
 import com.github.dskprt.bitgeon.util.GameState;
 import com.github.dskprt.bitgeon.util.Timer;
 
@@ -9,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
@@ -46,7 +48,14 @@ public class BitgeonGame {
         frame.add(canvas);
         frame.pack();
 
-        frame.addKeyListener(new Keyboard());
+        canvas.requestFocus();
+
+        canvas.addKeyListener(new Keyboard());
+
+        Mouse m = new Mouse();
+
+        canvas.addMouseListener(m);
+        canvas.addMouseMotionListener(m);
     }
 
     public void start() {
@@ -73,7 +82,9 @@ public class BitgeonGame {
 
     private void update(int delta) {
         timer.tick();
+
         Keyboard.poll();
+        Mouse.poll();
 
         if(Keyboard.isKeyDown(KeyEvent.VK_W)) {
             y -= delta;
@@ -105,6 +116,8 @@ public class BitgeonGame {
             g2d.setFont(new Font("Consolas", Font.PLAIN, 12));
             g2d.setColor(Color.GREEN);
             g2d.drawString(String.format("FPS: %s", timer.getFps()), 5, 5 + 12);
+            g2d.drawString(String.format("Mouse[x=%s,y=%s] Button0=%s, Button1=%s, Button2=%s",
+                    Mouse.getPosition().x, Mouse.getPosition().y, Mouse.isButtonDown(1), Mouse.isButtonDown(2), Mouse.isButtonDown(3)), 5, 5 + (12 * 2) + 3);
 
             g2d.setColor(Color.BLUE);
             g2d.drawRect(x, y, 50, 50);
