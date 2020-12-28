@@ -46,8 +46,8 @@ public class TextBox extends Component {
 
     @Override
     public void render(Graphics2D g2d) {
-        if(height == -1) height = (int) (FontUtil.getStringBounds(g2d, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-                        BitgeonGame.INSTANCE.canvas.getWidth(), BitgeonGame.INSTANCE.canvas.getHeight()).getHeight() + 6);
+        if(height == -1) height = (int) (FontUtil.getStringBounds(g2d, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmopqrstuvwxyz0123456789",
+                        BitgeonGame.WIDTH, BitgeonGame.HEIGHT).getHeight() + 6);
 
         g2d.setColor(Color.LIGHT_GRAY);
         g2d.fillRect(x, y, width, height);

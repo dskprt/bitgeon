@@ -22,10 +22,10 @@ public class TitleScreen extends Screen {
         Font titleFont = BitgeonGame.INSTANCE.font.deriveFont(36f);
         Rectangle2D titleRect = FontUtil.getStringBounds("bitgeon", titleFont);
 
-        Font optionFont = BitgeonGame.INSTANCE.font.deriveFont(24f);
+        Font optionFont = BitgeonGame.INSTANCE.font.deriveFont(20f);
 
         components.add(new Label(this, "bitgeon",
-                BitgeonGame.INSTANCE.canvas.getWidth() / 2 - (int) titleRect.getWidth() / 2,
+                BitgeonGame.WIDTH / 2 - (int) titleRect.getWidth() / 2,
                 100, Color.WHITE, titleFont));
 
         String op0 = selection == 0 ? "> Play <" : "Play";
@@ -33,14 +33,14 @@ public class TitleScreen extends Screen {
         String op2 = selection == 2 ? "> Quit <" : "Quit";
 
         components.add(new Label(this, op0,
-                BitgeonGame.INSTANCE.canvas.getWidth() / 2 - (int) FontUtil.getStringBounds(op0, optionFont).getWidth() / 2,
-                350, selection == 0 ? Color.GRAY : Color.WHITE, optionFont));
+                BitgeonGame.WIDTH / 2 - (int) FontUtil.getStringBounds(op0, optionFont).getWidth() / 2,
+                200, selection == 0 ? Color.GRAY : Color.WHITE, optionFont));
         components.add(new Label(this, op1,
-                BitgeonGame.INSTANCE.canvas.getWidth() / 2 - (int) FontUtil.getStringBounds(op1, optionFont).getWidth() / 2,
-                375, selection == 1 ? Color.GRAY : Color.WHITE, optionFont));
+                BitgeonGame.WIDTH / 2 - (int) FontUtil.getStringBounds(op1, optionFont).getWidth() / 2,
+                225, selection == 1 ? Color.GRAY : Color.WHITE, optionFont));
         components.add(new Label(this, op2,
-                BitgeonGame.INSTANCE.canvas.getWidth() / 2 - (int) FontUtil.getStringBounds(op2, optionFont).getWidth() / 2,
-                400, selection == 2 ? Color.GRAY : Color.WHITE, optionFont));
+                BitgeonGame.WIDTH / 2 - (int) FontUtil.getStringBounds(op2, optionFont).getWidth() / 2,
+                250, selection == 2 ? Color.GRAY : Color.WHITE, optionFont));
 
         super.init();
     }
@@ -67,6 +67,7 @@ public class TitleScreen extends Screen {
             switch(selection) {
                 case 0:
                     System.out.println("Play");
+                    BitgeonGame.INSTANCE.setScreen(new GameScreen());
                     break;
                 case 1:
                     System.out.println("Options");

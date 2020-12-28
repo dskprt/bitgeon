@@ -1,5 +1,7 @@
 package com.github.dskprt.bitgeon.input;
 
+import com.github.dskprt.bitgeon.BitgeonGame;
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -41,6 +43,10 @@ public class Mouse implements MouseListener, MouseMotionListener {
 
     public static Point getPosition() {
         return position;
+    }
+
+    public static Point getScaledPosition() {
+        return new Point(position.x / BitgeonGame.SCALING, position.y / BitgeonGame.SCALING);
     }
 
     public static boolean isButtonDown(int button) {

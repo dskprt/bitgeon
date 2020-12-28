@@ -12,7 +12,7 @@ public class Screen {
     protected Component selectedItem;
 
     public void init() {
-        selectedItem = components.get(0);
+        if(components.size() > 0) selectedItem = components.get(0);
     }
 
     public void render(Graphics2D g2d) {

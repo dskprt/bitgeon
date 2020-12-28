@@ -14,6 +14,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
@@ -25,6 +27,10 @@ import java.util.Random;
 public class BitgeonGame {
 
     public static BitgeonGame INSTANCE;
+
+    public static final int WIDTH = 640;
+    public static final int HEIGHT = 360;
+    public static int SCALING = 0;
 
     public final GameConfiguration config;
 
@@ -57,6 +63,8 @@ public class BitgeonGame {
         canvas.setIgnoreRepaint(true);
         canvas.setSize(config.width, config.height);
 
+        SCALING = config.width / WIDTH;
+
         frame.add(canvas);
         frame.pack();
 
@@ -80,13 +88,13 @@ public class BitgeonGame {
         GraphicsDevice gd = ge.getDefaultScreenDevice();
         GraphicsConfiguration gc = gd.getDefaultConfiguration();
 
-        VolatileImage img = gc.createCompatibleVolatileImage(config.width, config.height);
+        VolatileImage img = gc.createCompatibleVolatileImage(WIDTH, HEIGHT);
 
         timer = new Timer();
         state = GameState.RUNNING;
 
         try {
-            font = Font.createFont(Font.TRUETYPE_FONT, BitgeonGame.class.getResourceAsStream("/fonts/DeterminationMonoWebRegular.ttf")).deriveFont(16f);
+            font = Font.createFont(Font.TRUETYPE_FONT, BitgeonGame.class.getResourceAsStream("/fonts/DeterminationMonoWebRegular.ttf")).deriveFont(12f);
         } catch(FontFormatException | IOException e) {
             e.printStackTrace();
         }
@@ -96,13 +104,13 @@ public class BitgeonGame {
 
             try {
                 if(img.validate(gc) == VolatileImage.IMAGE_INCOMPATIBLE) {
-                    img = gc.createCompatibleVolatileImage(config.width, config.height);
+                    img = gc.createCompatibleVolatileImage(WIDTH, HEIGHT);
                 }
 
                 g2d = img.createGraphics();
 
                 g2d.setColor(Color.BLACK);
-                g2d.fillRect(0, 0, config.width, config.height);
+                g2d.fillRect(0, 0, WIDTH, HEIGHT);
 
                 g2d.setFont(font);
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -116,7 +124,9 @@ public class BitgeonGame {
                 render(g2d);
 
                 g = buffer.getDrawGraphics();
-                g.drawImage(img, 0, 0, null);
+
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+                g.drawImage(img, 0, 0, config.width, config.height, null);
 
                 if(!buffer.contentsLost()) buffer.show();
 
@@ -131,19 +141,19 @@ public class BitgeonGame {
     private void update(int delta) {
         timer.tick();
 
-        if(screen != null) screen.update(delta);
-
         Keyboard.poll();
         Mouse.poll();
+
+        if(screen != null) screen.update(delta);
     }
 
     private void render(Graphics2D g2d) {
+        if(screen != null) screen.render(g2d);
+
         g2d.setColor(Color.GREEN);
         g2d.drawString(String.format("FPS: %s", timer.getFps()), 5, 5 + 12);
         g2d.drawString(String.format("Mouse[x=%s,y=%s] Button0=%s, Button1=%s, Button2=%s",
-                Mouse.getPosition().x, Mouse.getPosition().y, Mouse.isButtonDown(1), Mouse.isButtonDown(2), Mouse.isButtonDown(3)), 5, 5 + (12 * 2) + 3);
-
-        if(screen != null) screen.render(g2d);
+                Mouse.getScaledPosition().x, Mouse.getScaledPosition().y, Mouse.isButtonDown(1), Mouse.isButtonDown(2), Mouse.isButtonDown(3)), 5, 5 + (12 * 2) + 3);
     }
 
     public GameState getState() {

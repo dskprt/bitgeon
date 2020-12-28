@@ -22,8 +22,8 @@ public class FontUtil {
     public static Rectangle2D getStringBounds(String text, Font font) {
         final GlyphVector gv = font.createGlyphVector(BitgeonGame.INSTANCE.fontRenderContext, text);
         final Rectangle2D stringBoundsForPosition = gv.getOutline().getBounds2D();
-        final double xForShapeCreation = (BitgeonGame.INSTANCE.canvas.getWidth() - stringBoundsForPosition.getWidth()) / 2d;
-        final double yForShapeCreation = (BitgeonGame.INSTANCE.canvas.getHeight() - stringBoundsForPosition.getHeight()) / 2d;
+        final double xForShapeCreation = (BitgeonGame.WIDTH - stringBoundsForPosition.getWidth()) / 2d;
+        final double yForShapeCreation = (BitgeonGame.HEIGHT - stringBoundsForPosition.getHeight()) / 2d;
 
         final Shape textShape = gv.getOutline((float) xForShapeCreation, (float) yForShapeCreation + BitgeonGame.INSTANCE.fontMetrics.getAscent());
 
@@ -33,8 +33,8 @@ public class FontUtil {
     public static Rectangle2D getStringBounds(String text) {
         final GlyphVector gv = BitgeonGame.INSTANCE.font.createGlyphVector(BitgeonGame.INSTANCE.fontRenderContext, text);
         final Rectangle2D stringBoundsForPosition = gv.getOutline().getBounds2D();
-        final double xForShapeCreation = (BitgeonGame.INSTANCE.canvas.getWidth() - stringBoundsForPosition.getWidth()) / 2d;
-        final double yForShapeCreation = (BitgeonGame.INSTANCE.canvas.getHeight() - stringBoundsForPosition.getHeight()) / 2d;
+        final double xForShapeCreation = (BitgeonGame.WIDTH - stringBoundsForPosition.getWidth()) / 2d;
+        final double yForShapeCreation = (BitgeonGame.HEIGHT - stringBoundsForPosition.getHeight()) / 2d;
 
         final Shape textShape = gv.getOutline((float) xForShapeCreation, (float) yForShapeCreation + BitgeonGame.INSTANCE.fontMetrics.getAscent());
 
