@@ -94,7 +94,7 @@ public class BitgeonGame {
         state = GameState.RUNNING;
 
         try {
-            font = Font.createFont(Font.TRUETYPE_FONT, BitgeonGame.class.getResourceAsStream("/fonts/DeterminationMonoWebRegular.ttf")).deriveFont(12f);
+            font = Font.createFont(Font.TRUETYPE_FONT, BitgeonGame.class.getResourceAsStream("/fonts/04B_03.ttf")).deriveFont(8f);
         } catch(FontFormatException | IOException e) {
             e.printStackTrace();
         }
@@ -115,6 +115,7 @@ public class BitgeonGame {
                 g2d.setFont(font);
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
                 g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+                g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 
                 fontMetrics = g2d.getFontMetrics();
                 fontRenderContext = g2d.getFontRenderContext();
@@ -136,9 +137,12 @@ public class BitgeonGame {
                 if(g2d != null) g2d.dispose();
             }
         }
+
+        shutdown();
+        System.exit(0);
     }
 
-    private void update(int delta) {
+    private void update(double delta) {
         timer.tick();
 
         Keyboard.poll();
@@ -151,9 +155,17 @@ public class BitgeonGame {
         if(screen != null) screen.render(g2d);
 
         g2d.setColor(Color.GREEN);
-        g2d.drawString(String.format("FPS: %s", timer.getFps()), 5, 5 + 12);
+        g2d.drawString(String.format("FPS: %s", timer.getFps()), 5, 5 + 8);
         g2d.drawString(String.format("Mouse[x=%s,y=%s] Button0=%s, Button1=%s, Button2=%s",
-                Mouse.getScaledPosition().x, Mouse.getScaledPosition().y, Mouse.isButtonDown(1), Mouse.isButtonDown(2), Mouse.isButtonDown(3)), 5, 5 + (12 * 2) + 3);
+                Mouse.getScaledPosition().x, Mouse.getScaledPosition().y, Mouse.isButtonDown(1), Mouse.isButtonDown(2), Mouse.isButtonDown(3)), 5, 5 + (8 * 2) + 2);
+    }
+
+    private void shutdown() {
+        System.out.println("Shutting down.");
+    }
+
+    public void setState(GameState state) {
+        this.state = state;
     }
 
     public GameState getState() {

@@ -5,6 +5,7 @@ import com.github.dskprt.bitgeon.gui.Screen;
 import com.github.dskprt.bitgeon.gui.components.Label;
 import com.github.dskprt.bitgeon.input.Keyboard;
 import com.github.dskprt.bitgeon.util.FontUtil;
+import com.github.dskprt.bitgeon.util.GameState;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -19,10 +20,10 @@ public class TitleScreen extends Screen {
     public void init() {
         components.clear();
 
-        Font titleFont = BitgeonGame.INSTANCE.font.deriveFont(36f);
+        Font titleFont = BitgeonGame.INSTANCE.font.deriveFont(32f);
         Rectangle2D titleRect = FontUtil.getStringBounds("bitgeon", titleFont);
 
-        Font optionFont = BitgeonGame.INSTANCE.font.deriveFont(20f);
+        Font optionFont = BitgeonGame.INSTANCE.font.deriveFont(16f);
 
         components.add(new Label(this, "bitgeon",
                 BitgeonGame.WIDTH / 2 - (int) titleRect.getWidth() / 2,
@@ -46,7 +47,7 @@ public class TitleScreen extends Screen {
     }
 
     @Override
-    public void update(int delta) {
+    public void update(double delta) {
         if(Keyboard.wasKeyClicked(KeyEvent.VK_UP)) {
             if(selection - 1 < 0) {
                 selection = maxSelection;
@@ -74,7 +75,7 @@ public class TitleScreen extends Screen {
                     break;
                 case 2:
                     System.out.println("Quit");
-                    System.exit(0);
+                    BitgeonGame.INSTANCE.setState(GameState.STOPPED);
                     break;
             }
         }

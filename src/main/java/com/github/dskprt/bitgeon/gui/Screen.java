@@ -19,7 +19,7 @@ public class Screen {
         components.forEach(c -> c.render(g2d));
     }
 
-    public void update(int delta) {
+    public void update(double delta) {
         for(Component c : components) {
             if(c.isHovered() && Mouse.wasButtonClicked(1)) {
                 selectedItem = c;

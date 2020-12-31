@@ -2,10 +2,10 @@ package com.github.dskprt.bitgeon.util;
 
 public class Timer {
 
-    private long lastFrame;
+    private double lastFrame;
     private int frames;
     private int fps;
-    private long lastFPS;
+    private double lastFPS;
 
     public Timer() {
         getDelta();
@@ -13,25 +13,24 @@ public class Timer {
     }
 
     public void tick() {
-        if (getTime() - lastFPS > 1000) {
+        double time = getTime();
+
+        if (time - lastFPS > 1000) {
             fps = frames;
             frames = 0;
             lastFPS += 1000;
         }
 
+        lastFrame = time;
         frames++;
     }
 
-    public int getDelta() {
-        long time = getTime();
-        int delta = (int) (time - lastFrame);
-        lastFrame = time;
-
-        return delta;
+    public double getDelta() {
+        return getTime() - lastFrame;
     }
 
-    public long getTime() {
-        return System.nanoTime() / 1000000;
+    public double getTime() {
+        return System.nanoTime() / 1000000d;
     }
 
     public int getFps() {
