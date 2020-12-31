@@ -5,17 +5,10 @@ import com.github.dskprt.bitgeon.gui.Screen;
 import com.github.dskprt.bitgeon.tile.Tile;
 import com.github.dskprt.bitgeon.tile.TileMap;
 import com.github.dskprt.bitgeon.tile.block.BlockTile;
-import com.github.dskprt.bitgeon.tile.entity.EntityTile;
-import com.github.dskprt.bitgeon.tile.entity.entities.PlayerEntity;
 
-import javax.imageio.ImageIO;
 import javax.vecmath.Vector2f;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameScreen extends Screen {
 

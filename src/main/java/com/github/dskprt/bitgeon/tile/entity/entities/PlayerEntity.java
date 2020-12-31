@@ -13,8 +13,8 @@ public class PlayerEntity extends EntityTile {
 
     public double movementSpeed = 0.01;
 
-    public PlayerEntity(TileMap parent, Vector2f coordinates, byte data) throws IOException {
-        super(parent, "player", coordinates, false, true, data);
+    public PlayerEntity(TileMap parent, Vector2f coordinates) throws IOException {
+        super(parent, "player", coordinates, false, true, (byte) 0);
     }
 
     @Override
@@ -28,19 +28,35 @@ public class PlayerEntity extends EntityTile {
     @Override
     public void update(double delta) {
         if(Keyboard.isKeyDown(KeyEvent.VK_W)) {
-            if(coordinates.y - (movementSpeed * delta) > 0) coordinates.y -= movementSpeed * delta;
+            if(coordinates.y - (movementSpeed * delta) > 0) {
+                coordinates.y -= movementSpeed * delta;
+            } else {
+                coordinates.y = 0;
+            }
         }
 
         if(Keyboard.isKeyDown(KeyEvent.VK_S)) {
-            if((coordinates.y * TILE_HEIGHT) + TILE_HEIGHT + (movementSpeed * delta) < (parent.height * TILE_HEIGHT)) coordinates.y += movementSpeed * delta;
+            if((coordinates.y * TILE_HEIGHT) + TILE_HEIGHT + (movementSpeed * delta) < (parent.height * TILE_HEIGHT)) {
+                coordinates.y += movementSpeed * delta;
+            } else {
+                coordinates.y = parent.height - 1;
+            }
         }
 
         if(Keyboard.isKeyDown(KeyEvent.VK_A)) {
-            if(coordinates.x - (movementSpeed * delta) > 0) coordinates.x -= movementSpeed * delta;
+            if(coordinates.x - (movementSpeed * delta) > 0) {
+                coordinates.x -= movementSpeed * delta;
+            } else {
+                coordinates.x = 0;
+            }
         }
 
         if(Keyboard.isKeyDown(KeyEvent.VK_D)) {
-            if((coordinates.x * TILE_WIDTH) + TILE_WIDTH + (movementSpeed * delta) < (parent.width * TILE_WIDTH)) coordinates.x += movementSpeed * delta;
+            if((coordinates.x * TILE_WIDTH) + TILE_WIDTH + (movementSpeed * delta) < (parent.width * TILE_WIDTH)) {
+                coordinates.x += movementSpeed * delta;
+            } else {
+                coordinates.x = parent.width - 1;
+            }
         }
     }
 }

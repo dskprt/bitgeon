@@ -27,7 +27,7 @@ public class TileMap {
         this.entities = new ArrayList<>();
 
         try {
-            this.player = new PlayerEntity(this, spawnPosition, (byte) 0);
+            this.player = new PlayerEntity(this, spawnPosition);
             this.entities.add(this.player);
         } catch(IOException e) {
             e.printStackTrace();
