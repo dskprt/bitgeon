@@ -13,7 +13,7 @@ public class Blocks {
     public static final Map<String, Class<?>> REGISTRY = new HashMap<>();
 
     static {
-        REGISTRY.put("brick", BrickBlock.class);
+        REGISTRY.put("bricks", BrickBlock.class);
     }
 
     public static BlockTile createBlockFromId(TileMap parent, String id, Vector2f coordinates) {

@@ -33,7 +33,7 @@ public class JMapFormat implements ITileMapFormat {
         switch(version) {
             case 1:
                 byte gzip = buffer[MAGIC.length + 1];
-                buffer = Arrays.copyOfRange(buffer, MAGIC.length + 1, buffer.length - 1);
+                buffer = Arrays.copyOfRange(buffer, MAGIC.length + 2, buffer.length);
 
                 if(gzip == 1) {
                     buffer = GZipUtil.decompress(buffer);

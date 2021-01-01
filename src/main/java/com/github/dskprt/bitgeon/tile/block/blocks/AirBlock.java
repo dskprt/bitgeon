@@ -6,9 +6,9 @@ import com.github.dskprt.bitgeon.tile.block.BlockTile;
 import javax.vecmath.Vector2f;
 import java.io.IOException;
 
-public class BrickBlock extends BlockTile {
+public class AirBlock extends BlockTile {
 
-    public BrickBlock(TileMap parent, Vector2f coordinates) throws IOException {
-        super(parent, "bricks", coordinates, false, false, (byte) 0);
+    public AirBlock(TileMap parent, Vector2f coordinates) throws IOException {
+        super(parent, "air", coordinates, false, true, (byte) 0);
     }
 }

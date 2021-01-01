@@ -1,5 +1,6 @@
 package com.github.dskprt.bitgeon.gui;
 
+import com.github.dskprt.bitgeon.BitgeonGame;
 import com.github.dskprt.bitgeon.input.Mouse;
 
 import java.awt.*;
@@ -7,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Screen {
+
+    private static final Color INGAME_BACKGROUND = new Color(0, 0, 0, 80);
 
     protected final List<Component> components = new ArrayList<>();
     protected Component selectedItem;
@@ -16,6 +19,11 @@ public class Screen {
     }
 
     public void render(Graphics2D g2d) {
+        if(BitgeonGame.INSTANCE.level != null) {
+            g2d.setColor(INGAME_BACKGROUND);
+            g2d.drawRect(0, 0, BitgeonGame.WIDTH, BitgeonGame.HEIGHT);
+        }
+
         components.forEach(c -> c.render(g2d));
     }
 

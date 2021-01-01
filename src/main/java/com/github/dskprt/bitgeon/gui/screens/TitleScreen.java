@@ -4,12 +4,15 @@ import com.github.dskprt.bitgeon.BitgeonGame;
 import com.github.dskprt.bitgeon.gui.Screen;
 import com.github.dskprt.bitgeon.gui.components.Label;
 import com.github.dskprt.bitgeon.input.Keyboard;
+import com.github.dskprt.bitgeon.tile.TileMaps;
 import com.github.dskprt.bitgeon.util.FontUtil;
 import com.github.dskprt.bitgeon.util.GameState;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
+import java.net.URISyntaxException;
 
 public class TitleScreen extends Screen {
 
@@ -68,7 +71,15 @@ public class TitleScreen extends Screen {
             switch(selection) {
                 case 0:
                     System.out.println("Play");
-                    BitgeonGame.INSTANCE.setScreen(new GameScreen());
+                    BitgeonGame.INSTANCE.setScreen(null);
+                    BitgeonGame.INSTANCE.setState(GameState.INGAME);
+
+                    try {
+                        BitgeonGame.INSTANCE.level = TileMaps.loadMap(new File(TitleScreen.class.getResource("/levels/level0.jmap").toURI()));
+                    } catch(URISyntaxException e) {
+                        e.printStackTrace();
+                        BitgeonGame.INSTANCE.setState(GameState.STOPPED);
+                    }
                     break;
                 case 1:
                     System.out.println("Options");

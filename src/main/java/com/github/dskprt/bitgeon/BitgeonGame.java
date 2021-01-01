@@ -5,6 +5,8 @@ import com.github.dskprt.bitgeon.gui.Screen;
 import com.github.dskprt.bitgeon.gui.screens.TitleScreen;
 import com.github.dskprt.bitgeon.input.Keyboard;
 import com.github.dskprt.bitgeon.input.Mouse;
+import com.github.dskprt.bitgeon.tile.Tile;
+import com.github.dskprt.bitgeon.tile.TileMap;
 import com.github.dskprt.bitgeon.util.GameState;
 import com.github.dskprt.bitgeon.util.Timer;
 
@@ -48,6 +50,8 @@ public class BitgeonGame {
 
     public FontRenderContext fontRenderContext;
     public FontMetrics fontMetrics;
+
+    public TileMap level;
 
     public BitgeonGame(GameConfiguration config) {
         INSTANCE = this;
@@ -120,7 +124,7 @@ public class BitgeonGame {
                 fontMetrics = g2d.getFontMetrics();
                 fontRenderContext = g2d.getFontRenderContext();
 
-                if(screen == null) setScreen(new TitleScreen());
+                if(screen == null && state != GameState.INGAME) setScreen(new TitleScreen());
 
                 render(g2d);
 
@@ -148,10 +152,14 @@ public class BitgeonGame {
         Keyboard.poll();
         Mouse.poll();
 
+        if(level != null) level.update(delta);
         if(screen != null) screen.update(delta);
     }
 
     private void render(Graphics2D g2d) {
+        if(level != null) level.render(g2d, BitgeonGame.WIDTH / 2f - (level.player.coordinates.x * Tile.TILE_WIDTH) - Tile.TILE_WIDTH / 2f,
+                BitgeonGame.HEIGHT / 2f - (level.player.coordinates.y * Tile.TILE_HEIGHT) - Tile.TILE_HEIGHT / 2f);
+
         if(screen != null) screen.render(g2d);
 
         g2d.setColor(Color.GREEN);
@@ -177,7 +185,7 @@ public class BitgeonGame {
     }
 
     public void setScreen(Screen screen) {
-        screen.init();
+        if(screen != null) screen.init();
         this.screen = screen;
     }
 }

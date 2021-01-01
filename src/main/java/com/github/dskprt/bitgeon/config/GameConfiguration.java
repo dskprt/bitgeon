@@ -8,24 +8,26 @@ import java.util.Properties;
 
 public class GameConfiguration {
 
+    public Properties properties;
+
     public int width;
     public int height;
 
     public GameConfiguration(String file) {
-        Properties config = new Properties();
+        properties = new Properties();
 
         try {
-            config.load(new FileReader(file));
+            properties.load(new FileReader(file));
         } catch (IOException e) {
             try {
                 Files.copy(GameConfiguration.class.getResourceAsStream("/default.properties"), Paths.get(file));
-                config.load(new FileReader(file));
+                properties.load(new FileReader(file));
             } catch(IOException ex) {
                 ex.printStackTrace();
             }
         }
 
-        this.width = Integer.parseInt(config.getProperty("width"));
-        this.height = Integer.parseInt(config.getProperty("height"));
+        this.width = Integer.parseInt(properties.getProperty("width"));
+        this.height = Integer.parseInt(properties.getProperty("height"));
     }
 }
