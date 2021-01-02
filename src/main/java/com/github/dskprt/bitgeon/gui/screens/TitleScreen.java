@@ -75,7 +75,7 @@ public class TitleScreen extends Screen {
                     BitgeonGame.INSTANCE.setState(GameState.INGAME);
 
                     try {
-                        BitgeonGame.INSTANCE.level = TileMaps.loadMap(new File(TitleScreen.class.getResource("/levels/level0.jmap").toURI()));
+                        BitgeonGame.INSTANCE.level = TileMaps.loadMap(new File(TitleScreen.class.getResource("/levels/collisions.jmap").toURI()));
                     } catch(URISyntaxException e) {
                         e.printStackTrace();
                         BitgeonGame.INSTANCE.setState(GameState.STOPPED);

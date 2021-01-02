@@ -1,7 +1,9 @@
 package com.github.dskprt.bitgeon.tile.block;
 
 import com.github.dskprt.bitgeon.tile.TileMap;
+import com.github.dskprt.bitgeon.tile.block.blocks.AirBlock;
 import com.github.dskprt.bitgeon.tile.block.blocks.BrickBlock;
+import com.github.dskprt.bitgeon.tile.block.blocks.GrassBlock;
 
 import javax.vecmath.Vector2f;
 import java.lang.reflect.InvocationTargetException;
@@ -14,6 +16,8 @@ public class Blocks {
 
     static {
         REGISTRY.put("bricks", BrickBlock.class);
+        REGISTRY.put("air", AirBlock.class);
+        REGISTRY.put("grass", GrassBlock.class);
     }
 
     public static BlockTile createBlockFromId(TileMap parent, String id, Vector2f coordinates) {
