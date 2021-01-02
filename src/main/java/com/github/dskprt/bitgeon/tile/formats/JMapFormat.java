@@ -58,7 +58,9 @@ public class JMapFormat implements ITileMapFormat {
                     int y = block.getInt("y");
                     byte data = (byte) block.getInt("d");
 
-                    map.blocks.add(Blocks.createBlockFromId(map, id, new Vector2f(x, y), data));
+                    int index = (y * width) + x;
+
+                    map.blocks.set(index, Blocks.createBlockFromId(map, id, new Vector2f(x, y), data));
                 }
 
                 JSONArray entities = json.getJSONArray("e");
@@ -71,7 +73,9 @@ public class JMapFormat implements ITileMapFormat {
                     int y = entity.getInt("y");
                     byte data = (byte) entity.getInt("d");
 
-                    map.entities.add(Entities.createEntityFromId(map, id, new Vector2f(x, y), data));
+                    int index = (y * width) + x;
+
+                    map.entities.set(index, Entities.createEntityFromId(map, id, new Vector2f(x, y), data));
                 }
                 break;
         }

@@ -9,6 +9,6 @@ import java.io.IOException;
 public class AirBlock extends BlockTile {
 
     public AirBlock(TileMap parent, Vector2f coordinates) throws IOException {
-        super(parent, "air", coordinates, false, true, (byte) 0);
+        super(parent, "air", coordinates, false, false, (byte) 0);
     }
 }

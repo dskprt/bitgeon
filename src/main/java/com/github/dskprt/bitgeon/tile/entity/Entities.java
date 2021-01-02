@@ -2,6 +2,7 @@ package com.github.dskprt.bitgeon.tile.entity;
 
 import com.github.dskprt.bitgeon.tile.TileMap;
 import com.github.dskprt.bitgeon.tile.block.BlockTile;
+import com.github.dskprt.bitgeon.tile.entity.entities.InteractionTestEntity;
 import com.github.dskprt.bitgeon.tile.entity.entities.PlayerEntity;
 
 import javax.vecmath.Vector2f;
@@ -15,6 +16,7 @@ public class Entities {
 
     static {
         REGISTRY.put("player", PlayerEntity.class);
+        REGISTRY.put("interaction_test", InteractionTestEntity.class);
     }
 
     public static EntityTile createEntityFromId(TileMap parent, String id, Vector2f coordinates) {

@@ -9,6 +9,6 @@ import java.io.IOException;
 public class GrassBlock extends BlockTile {
 
     public GrassBlock(TileMap parent, Vector2f coordinates) throws IOException {
-        super(parent, "grass", coordinates, false, true, (byte)0);
+        super(parent, "grass", coordinates, false, false, (byte)0);
     }
 }

@@ -16,17 +16,19 @@ public class Tile {
     public BufferedImage image;
     public Vector2f coordinates;
     public Rectangle2D.Float collisionBox;
+    public boolean canCollide;
 
-    public Tile(TileMap parent, String id, BufferedImage image, Vector2f coordinates) {
-        this(parent, id, image, coordinates, new Rectangle2D.Float(0, 0, TILE_WIDTH, TILE_HEIGHT));
+    public Tile(TileMap parent, String id, BufferedImage image, Vector2f coordinates, boolean canCollide) {
+        this(parent, id, image, coordinates, new Rectangle2D.Float(0, 0, TILE_WIDTH, TILE_HEIGHT), canCollide);
     }
 
-    public Tile(TileMap parent, String id, BufferedImage image, Vector2f coordinates, Rectangle2D.Float collisionBox) {
+    public Tile(TileMap parent, String id, BufferedImage image, Vector2f coordinates, Rectangle2D.Float collisionBox, boolean canCollide) {
         this.parent = parent;
         this.id = id;
         this.image = image;
         this.coordinates = coordinates;
         this.collisionBox = collisionBox;
+        this.canCollide = canCollide;
     }
 
     public void render(Graphics2D g2d, float offsetX, float offsetY) {

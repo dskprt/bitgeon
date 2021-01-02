@@ -9,6 +9,6 @@ import java.io.IOException;
 public class BrickBlock extends BlockTile {
 
     public BrickBlock(TileMap parent, Vector2f coordinates) throws IOException {
-        super(parent, "bricks", coordinates, false, false, (byte) 0);
+        super(parent, "bricks", coordinates, false, true, (byte) 0);
     }
 }
