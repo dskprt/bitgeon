@@ -3,10 +3,12 @@ package com.github.dskprt.bitgeon.tile.entity.entities;
 import com.github.dskprt.bitgeon.BitgeonGame;
 import com.github.dskprt.bitgeon.input.Keyboard;
 import com.github.dskprt.bitgeon.input.Mouse;
-import com.github.dskprt.bitgeon.tile.Tile;
+import com.github.dskprt.bitgeon.item.Item;
+import com.github.dskprt.bitgeon.item.items.PistolItem;
 import com.github.dskprt.bitgeon.tile.TileMap;
 import com.github.dskprt.bitgeon.tile.block.BlockTile;
 import com.github.dskprt.bitgeon.tile.entity.EntityTile;
+import com.github.dskprt.bitgeon.tile.entity.inventory.Inventory;
 import com.github.dskprt.bitgeon.util.Facing;
 import com.github.dskprt.bitgeon.util.Rectangle2DUtil;
 import com.github.dskprt.bitgeon.util.Ray;
@@ -25,13 +27,15 @@ public class PlayerEntity extends EntityTile {
     public double movementSpeed = 0.01;
     public Facing facing = Facing.NORTH;
 
-    private double rotation = 0;
+    public double rotation = 0;
 
     private Ray blockSelectionRay;
     private Ray entitySelectionRay;
 
     public PlayerEntity(TileMap parent, Vector2f coordinates) throws IOException {
         super(parent, "player", coordinates, new Rectangle2D.Float(4, 2, 12, 16), false, true, (byte) 0);
+
+        inventory.items.put(Inventory.Slot.MAIN, new PistolItem(this, (byte) 0));
     }
 
     @Override
@@ -76,6 +80,13 @@ public class PlayerEntity extends EntityTile {
                 g2d.setTransform(transform);
             }
         }
+
+        int x = 0;
+        int y = BitgeonGame.HEIGHT - (Item.TEXTURE_HEIGHT + 2);
+
+        g2d.setColor(Color.DARK_GRAY);
+        g2d.fillRect(x, y, Item.TEXTURE_WIDTH + 2, Item.TEXTURE_HEIGHT + 2);
+        g2d.drawImage(inventory.items.get(Inventory.Slot.MAIN).image, x + 1, y + 1, null);
     }
 
     // i honestly have no idea how and why do those collisions even work
@@ -293,6 +304,10 @@ public class PlayerEntity extends EntityTile {
                     }
                 }
             }
+        }
+
+        if(Mouse.wasButtonClicked(1)) {
+            inventory.items.get(Inventory.Slot.MAIN).use();
         }
     }
 }

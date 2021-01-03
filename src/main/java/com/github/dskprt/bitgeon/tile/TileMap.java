@@ -7,9 +7,7 @@ import com.github.dskprt.bitgeon.tile.entity.entities.PlayerEntity;
 import javax.vecmath.Vector2f;
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 
 public class TileMap {
@@ -36,25 +34,33 @@ public class TileMap {
     }
 
     public void render(Graphics2D g2d, float offsetX, float offsetY) {
-        blocks.forEach(b -> {
-            if(b != null) b.render(g2d, offsetX, offsetY);
-        });
+        List<BlockTile> blocks0 = new ArrayList<>(blocks);
 
-        entities.forEach(e -> {
-            if(e != null) e.render(g2d, offsetX, offsetY);
-        });
+        for(BlockTile block : blocks0) {
+            if(block != null) block.render(g2d, offsetX, offsetY);
+        }
+
+        List<EntityTile> entities0 = new ArrayList<>(entities);
+
+        for(EntityTile entity : entities0) {
+            if(entity != null) entity.render(g2d, offsetX, offsetY);
+        }
 
         player.render(g2d, offsetX, offsetY);
     }
 
     public void update(double delta) {
-        blocks.forEach(b -> {
-            if(b != null) b.update(delta);
-        });
+        List<BlockTile> blocks0 = new ArrayList<>(blocks);
 
-        entities.forEach(e -> {
-            if(e != null) e.update(delta);
-        });
+        for(BlockTile block : blocks0) {
+            if(block != null) block.update(delta);
+        }
+
+        List<EntityTile> entities0 = new ArrayList<>(entities);
+
+        for(EntityTile entity : entities0) {
+            if(entity != null) entity.update(delta);
+        }
 
         player.update(delta);
     }
