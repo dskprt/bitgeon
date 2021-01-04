@@ -18,18 +18,28 @@ public class BulletEntity extends EntityTile {
 
     private static final float moveSpeed = 0.3f;
 
+    private boolean decreasingDamage = false;
+
     public float damage;
     private final float xVel, yVel;
 
     public BulletEntity(TileMap parent, Vector2f coordinates, float damage, byte data) throws IOException {
+        this(parent, coordinates, new Vector2f(Mouse.getScaledPosition().x, Mouse.getScaledPosition().y), damage, data);
+    }
+
+    public BulletEntity(TileMap parent, Vector2f coordinates, Vector2f destination, float damage, byte data) throws IOException {
         super(parent, "bullet", coordinates, new Rectangle2D.Float(8, 8, 4, 4), false, false, data);
+
+        if(data == 1) {
+            decreasingDamage = true;
+        }
 
         this.damage = damage;
 
         float x = BitgeonGame.WIDTH / 2f - TILE_WIDTH / 2f;
         float y = BitgeonGame.HEIGHT / 2f - TILE_HEIGHT / 2f;
-        float tX = x - Mouse.getScaledPosition().x;
-        float tY = y - Mouse.getScaledPosition().y;
+        float tX = x - destination.x;
+        float tY = y - destination.y;
 
         float mag = (float) -Math.hypot(tX, tY);
 
@@ -53,8 +63,18 @@ public class BulletEntity extends EntityTile {
 
     @Override
     public void update(double delta) {
+        if(damage <= 0) {
+            parent.entities.remove(this);
+            return;
+        }
+
         coordinates.x += xVel;
         coordinates.y += yVel;
+
+        if(coordinates.x < 0 || coordinates.y < 0 || coordinates.x > parent.width || coordinates.y > parent.height) {
+            parent.entities.remove(this);
+            return;
+        }
 
         Tile tile = parent.getBlockAt(Math.round(coordinates.x), Math.round(coordinates.y));
 
@@ -82,6 +102,10 @@ public class BulletEntity extends EntityTile {
 
                 ((EntityTile) tile).health -= damage;
             }
+        }
+
+        if(decreasingDamage) {
+            damage -= 0.075f;
         }
     }
 }

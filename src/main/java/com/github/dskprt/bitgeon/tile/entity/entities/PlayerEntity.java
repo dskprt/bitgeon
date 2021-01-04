@@ -5,6 +5,7 @@ import com.github.dskprt.bitgeon.input.Keyboard;
 import com.github.dskprt.bitgeon.input.Mouse;
 import com.github.dskprt.bitgeon.item.Item;
 import com.github.dskprt.bitgeon.item.items.PistolItem;
+import com.github.dskprt.bitgeon.item.items.ShotgunItem;
 import com.github.dskprt.bitgeon.tile.TileMap;
 import com.github.dskprt.bitgeon.tile.block.BlockTile;
 import com.github.dskprt.bitgeon.tile.entity.EntityTile;
@@ -37,6 +38,7 @@ public class PlayerEntity extends EntityTile {
         super(parent, "player", coordinates, new Rectangle2D.Float(4, 2, 12, 16), false, true, (byte) 0);
 
         inventory.items.put(Inventory.Slot.MAIN, new PistolItem(this, (byte) 0));
+        inventory.items.put(Inventory.Slot.SECONDARY, new ShotgunItem(this, (byte) 0));
     }
 
     @Override
@@ -85,13 +87,15 @@ public class PlayerEntity extends EntityTile {
         int x = 0;
         int y = BitgeonGame.HEIGHT - (Item.TEXTURE_HEIGHT + 2);
 
-        g2d.setColor(Color.DARK_GRAY);
-        g2d.fillRect(x, y, Item.TEXTURE_WIDTH + 2, Item.TEXTURE_HEIGHT + 2);
-        g2d.drawImage(inventory.items.get(Inventory.Slot.MAIN).image, x + 1, y + 1, null);
+        if(inventory.items.get(selectedSlot) != null) {
+            g2d.setColor(Color.DARK_GRAY);
+            g2d.fillRect(x, y, Item.TEXTURE_WIDTH + 2, Item.TEXTURE_HEIGHT + 2);
+            g2d.drawImage(inventory.items.get(selectedSlot).image, x + 1, y + 1, null);
+        }
 
         g2d.setColor(Color.RED);
 
-        String s = "Health: " + health;
+        String s = "Health: " + Math.round(health * 100.0) / 100.0;
         Rectangle2D bounds = FontUtil.getStringBounds(s);
 
         g2d.drawString(s, BitgeonGame.WIDTH - (int)bounds.getWidth() - 2, (int) bounds.getHeight() + 2);
@@ -314,8 +318,16 @@ public class PlayerEntity extends EntityTile {
             }
         }
 
+        if(Keyboard.wasKeyClicked(KeyEvent.VK_1)) {
+            selectedSlot = Inventory.Slot.MAIN;
+        }
+
+        if(Keyboard.wasKeyClicked(KeyEvent.VK_2)) {
+            selectedSlot = Inventory.Slot.SECONDARY;
+        }
+
         if(Mouse.wasButtonClicked(1)) {
-            inventory.items.get(Inventory.Slot.MAIN).use();
+            inventory.items.get(selectedSlot).use();
         }
 
         if(health <= 0) {

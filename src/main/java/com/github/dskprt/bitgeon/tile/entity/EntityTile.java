@@ -16,6 +16,7 @@ import java.io.IOException;
 public class EntityTile extends Tile {
 
     public Inventory inventory;
+    public int selectedSlot;
 
     public float health;
     public boolean canInteract;
@@ -46,6 +47,8 @@ public class EntityTile extends Tile {
             this.inventory = inventory;
         }
 
+        this.selectedSlot = Inventory.Slot.MAIN;
+
         this.health = health;
         this.canInteract = canInteract;
         this.data = data;
@@ -55,10 +58,10 @@ public class EntityTile extends Tile {
     public void render(Graphics2D g2d, float offsetX, float offsetY) {
         AffineTransform transform = g2d.getTransform();
 
-        Rectangle2D bounds = FontUtil.getStringBounds(String.valueOf(health)).getBounds();
+        Rectangle2D bounds = FontUtil.getStringBounds(String.valueOf(Math.round(health * 100.0) / 100.0)).getBounds();
         g2d.translate(offsetX + (coordinates.x * TILE_WIDTH) + (TILE_WIDTH / 2f - bounds.getWidth() / 2), offsetY + (coordinates.y * TILE_HEIGHT) - bounds.getHeight() + 5);
         g2d.setColor(Color.RED);
-        g2d.drawString(String.valueOf(health), 0, 0);
+        g2d.drawString(String.valueOf(Math.round(health * 100.0) / 100.0), 0, 0);
         g2d.setTransform(transform);
 
         super.render(g2d, offsetX, offsetY);
