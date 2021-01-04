@@ -9,6 +9,8 @@ import com.github.dskprt.bitgeon.tile.block.blocks.GrassBlock;
 import com.github.dskprt.bitgeon.tile.entity.EntityTile;
 
 import javax.vecmath.Vector2f;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
@@ -41,6 +43,15 @@ public class BulletEntity extends EntityTile {
     }
 
     @Override
+    public void render(Graphics2D g2d, float offsetX, float offsetY) {
+        AffineTransform transform = g2d.getTransform();
+
+        g2d.translate(offsetX + (coordinates.x * TILE_WIDTH), offsetY + (coordinates.y * TILE_HEIGHT));
+        g2d.drawImage(image, 0, 0, null);
+        g2d.setTransform(transform);
+    }
+
+    @Override
     public void update(double delta) {
         coordinates.x += xVel;
         coordinates.y += yVel;
@@ -69,9 +80,7 @@ public class BulletEntity extends EntityTile {
                 System.out.println("Hit entity! " + tile.coordinates.toString());
                 parent.entities.remove(this);
 
-                int index = ((int)tile.coordinates.y * parent.width) + (int)tile.coordinates.x;
-
-                parent.entities.set(index, null);
+                ((EntityTile) tile).health -= damage;
             }
         }
     }

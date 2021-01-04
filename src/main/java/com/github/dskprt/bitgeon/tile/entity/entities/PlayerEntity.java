@@ -10,6 +10,7 @@ import com.github.dskprt.bitgeon.tile.block.BlockTile;
 import com.github.dskprt.bitgeon.tile.entity.EntityTile;
 import com.github.dskprt.bitgeon.tile.entity.inventory.Inventory;
 import com.github.dskprt.bitgeon.util.Facing;
+import com.github.dskprt.bitgeon.util.FontUtil;
 import com.github.dskprt.bitgeon.util.Rectangle2DUtil;
 import com.github.dskprt.bitgeon.util.Ray;
 
@@ -87,6 +88,13 @@ public class PlayerEntity extends EntityTile {
         g2d.setColor(Color.DARK_GRAY);
         g2d.fillRect(x, y, Item.TEXTURE_WIDTH + 2, Item.TEXTURE_HEIGHT + 2);
         g2d.drawImage(inventory.items.get(Inventory.Slot.MAIN).image, x + 1, y + 1, null);
+
+        g2d.setColor(Color.RED);
+
+        String s = "Health: " + health;
+        Rectangle2D bounds = FontUtil.getStringBounds(s);
+
+        g2d.drawString(s, BitgeonGame.WIDTH - (int)bounds.getWidth() - 2, (int) bounds.getHeight() + 2);
     }
 
     // i honestly have no idea how and why do those collisions even work
@@ -308,6 +316,10 @@ public class PlayerEntity extends EntityTile {
 
         if(Mouse.wasButtonClicked(1)) {
             inventory.items.get(Inventory.Slot.MAIN).use();
+        }
+
+        if(health <= 0) {
+            // TODO display death screen
         }
     }
 }
