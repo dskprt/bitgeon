@@ -1,10 +1,9 @@
 package com.github.dskprt.bitgeon.tile.block;
 
+import com.github.dskprt.bitgeon.BitgeonGame;
 import com.github.dskprt.bitgeon.tile.TileMap;
-import com.github.dskprt.bitgeon.tile.block.blocks.AirBlock;
-import com.github.dskprt.bitgeon.tile.block.blocks.BrickBlock;
-import com.github.dskprt.bitgeon.tile.block.blocks.GrassBlock;
-import com.github.dskprt.bitgeon.tile.block.blocks.InteractionTestBlock;
+import com.github.dskprt.bitgeon.tile.block.blocks.*;
+import com.github.dskprt.bitgeon.util.GameState;
 
 import javax.vecmath.Vector2f;
 import java.lang.reflect.InvocationTargetException;
@@ -20,6 +19,7 @@ public class Blocks {
         REGISTRY.put("air", AirBlock.class);
         REGISTRY.put("grass", GrassBlock.class);
         REGISTRY.put("interaction_test", InteractionTestBlock.class);
+        REGISTRY.put("door", DoorBlock.class);
     }
 
     public static BlockTile createBlockFromId(TileMap parent, String id, Vector2f coordinates) {
@@ -30,12 +30,13 @@ public class Blocks {
         try {
             return (BlockTile) REGISTRY.get(id).getDeclaredConstructor(TileMap.class, Vector2f.class).newInstance(parent, coordinates);
         } catch(NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
 
             try {
                 return (BlockTile) REGISTRY.get(id).getDeclaredConstructor(TileMap.class, Vector2f.class, byte.class).newInstance(parent, coordinates, data);
             } catch(NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
                 ex.printStackTrace();
+                BitgeonGame.INSTANCE.setState(GameState.STOPPED);
             }
         }
 

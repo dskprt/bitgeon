@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class TileMaps {
 
+    private static final Map<String, TileMap> CACHE = new HashMap<>();
     public static final Map<String, ITileMapFormat> FORMATS = new HashMap<>();
 
     static {
@@ -16,8 +17,18 @@ public class TileMaps {
     }
 
     public static TileMap loadMap(File file) {
+        String path = file.getAbsolutePath();
+
+        if(CACHE.containsKey(path)) {
+            return CACHE.get(path);
+        }
+
         try {
-            return FORMATS.get(file.getName().substring(file.getName().lastIndexOf('.'))).parse(file);
+            TileMap map = FORMATS.get(file.getName().substring(file.getName().lastIndexOf('.'))).parse(file);
+
+            CACHE.put(path, map);
+
+            return map;
         } catch(Exception e) {
             e.printStackTrace();
         }

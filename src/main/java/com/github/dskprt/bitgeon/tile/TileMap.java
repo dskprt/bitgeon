@@ -12,6 +12,8 @@ import java.util.List;
 
 public class TileMap {
 
+    public final String name;
+
     public final int width;
     public final int height;
 
@@ -19,7 +21,9 @@ public class TileMap {
     public List<BlockTile> blocks;
     public List<EntityTile> entities;
 
-    public TileMap(int width, int height, Vector2f spawnPosition) {
+    public TileMap(String name, int width, int height, Vector2f spawnPosition) {
+        this.name = name;
+
         this.width = width;
         this.height = height;
 

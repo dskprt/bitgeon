@@ -46,7 +46,7 @@ public class JMapFormat implements ITileMapFormat {
                 int spawnX = json.getInt("x");
                 int spawnY = json.getInt("y");
 
-                map = new TileMap(width, height, new Vector2f(spawnX, spawnY));
+                map = new TileMap(getBaseName(file.getName()), width, height, new Vector2f(spawnX, spawnY));
 
                 JSONArray blocks = json.getJSONArray("b");
 
@@ -81,5 +81,15 @@ public class JMapFormat implements ITileMapFormat {
         }
 
         return map;
+    }
+
+    private static String getBaseName(String fileName) {
+        int index = fileName.lastIndexOf('.');
+
+        if (index == -1) {
+            return fileName;
+        } else {
+            return fileName.substring(0, index);
+        }
     }
 }
