@@ -4,13 +4,13 @@ import com.github.dskprt.bitgeon.BitgeonGame;
 import com.github.dskprt.bitgeon.tile.TileMap;
 import com.github.dskprt.bitgeon.tile.TileMaps;
 import com.github.dskprt.bitgeon.tile.block.BlockTile;
-import com.github.dskprt.bitgeon.tile.entity.entities.PlayerEntity;
 import com.github.dskprt.bitgeon.util.GameState;
 
 import javax.vecmath.Vector2f;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class DoorBlock extends BlockTile {
 
@@ -22,26 +22,32 @@ public class DoorBlock extends BlockTile {
 
     @Override
     public void interact() {
-        TileMap level = null;
-
         if(data == 0) {
-            try {
-                level = TileMaps.loadMap(new File(DoorBlock.class.getResource("/levels/"
-                        + BitgeonGame.INSTANCE.level.name.substring(0, BitgeonGame.INSTANCE.level.name.lastIndexOf('_')) + ".jmap").toURI()));
-            } catch(URISyntaxException e) {
-                e.printStackTrace();
-            }
+            new Thread(() -> {
+                try {
+                    loadLevel(new File(DoorBlock.class.getResource("/levels/"
+                            + BitgeonGame.INSTANCE.level.name.substring(0, BitgeonGame.INSTANCE.level.name.lastIndexOf('_')) + ".jmap").toURI()));
+                } catch(URISyntaxException e) {
+                    e.printStackTrace();
+                }
+            }, "Level loading thread").start();
         } else {
-            try {
-                level = TileMaps.loadMap(new File(DoorBlock.class.getResource("/levels/"
-                        + BitgeonGame.INSTANCE.level.name + "_" + data + ".jmap").toURI()));
-            } catch(URISyntaxException e) {
-                e.printStackTrace();
-            }
+            new Thread(() -> {
+                try {
+                    loadLevel(new File(DoorBlock.class.getResource("/levels/"
+                            + BitgeonGame.INSTANCE.level.name + "_" + data + ".jmap").toURI()));
+                } catch(URISyntaxException e) {
+                    e.printStackTrace();
+                }
+            }, "Level loading thread").start();
         }
+    }
+
+    private void loadLevel(File file) {
+        TileMap level = TileMaps.loadMap(file);
 
         if(level == null) {
-            //TODO display an error screen?
+            System.out.println("Unexpected error. (level == null)");
             BitgeonGame.INSTANCE.setState(GameState.STOPPED);
             return;
         }
@@ -52,5 +58,6 @@ public class DoorBlock extends BlockTile {
 
         prevPos = BitgeonGame.INSTANCE.level.player.coordinates;
         BitgeonGame.INSTANCE.level = level;
+        BitgeonGame.INSTANCE.setScreen(null);
     }
 }

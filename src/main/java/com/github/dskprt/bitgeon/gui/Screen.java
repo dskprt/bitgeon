@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Screen {
 
-    private static final Color INGAME_BACKGROUND = new Color(0, 0, 0, 80);
+    private static final Color INGAME_BACKGROUND = new Color(0, 0, 0, 128);
 
     protected final List<Component> components = new ArrayList<>();
     protected Component selectedItem;
@@ -21,7 +21,7 @@ public class Screen {
     public void render(Graphics2D g2d) {
         if(BitgeonGame.INSTANCE.level != null) {
             g2d.setColor(INGAME_BACKGROUND);
-            g2d.drawRect(0, 0, BitgeonGame.WIDTH, BitgeonGame.HEIGHT);
+            g2d.fillRect(0, 0, BitgeonGame.WIDTH, BitgeonGame.HEIGHT);
         }
 
         components.forEach(c -> c.render(g2d));
@@ -39,5 +39,9 @@ public class Screen {
 
     public Component getSelectedItem() {
         return selectedItem;
+    }
+
+    public boolean doesScreenPauseGame() {
+        return true;
     }
 }

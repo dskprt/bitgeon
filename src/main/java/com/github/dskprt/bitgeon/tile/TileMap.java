@@ -1,5 +1,6 @@
 package com.github.dskprt.bitgeon.tile;
 
+import com.github.dskprt.bitgeon.BitgeonGame;
 import com.github.dskprt.bitgeon.tile.block.BlockTile;
 import com.github.dskprt.bitgeon.tile.entity.EntityTile;
 import com.github.dskprt.bitgeon.tile.entity.entities.PlayerEntity;
@@ -41,13 +42,29 @@ public class TileMap {
         List<BlockTile> blocks0 = new ArrayList<>(blocks);
 
         for(BlockTile block : blocks0) {
-            if(block != null) block.render(g2d, offsetX, offsetY);
+            if(block != null) {
+                double screenX = offsetX + (block.coordinates.x * Tile.TILE_WIDTH);
+                double screenY = offsetY + (block.coordinates.y * Tile.TILE_HEIGHT);
+
+                if(screenX + Tile.TILE_WIDTH < 0 || screenY + Tile.TILE_HEIGHT < 0
+                        || screenX > BitgeonGame.WIDTH || screenY > BitgeonGame.HEIGHT) continue;
+
+                block.render(g2d, offsetX, offsetY);
+            }
         }
 
         List<EntityTile> entities0 = new ArrayList<>(entities);
 
         for(EntityTile entity : entities0) {
-            if(entity != null) entity.render(g2d, offsetX, offsetY);
+            if(entity != null) {
+                double screenX = offsetX + (entity.coordinates.x * Tile.TILE_WIDTH);
+                double screenY = offsetY + (entity.coordinates.y * Tile.TILE_HEIGHT);
+
+                if(screenX + Tile.TILE_WIDTH < 0 || screenY + Tile.TILE_HEIGHT < 0
+                        || screenX > BitgeonGame.WIDTH || screenY > BitgeonGame.HEIGHT) continue;
+
+                entity.render(g2d, offsetX, offsetY);
+            }
         }
 
         player.render(g2d, offsetX, offsetY);
@@ -66,7 +83,9 @@ public class TileMap {
             if(entity != null) entity.update(delta);
         }
 
-        player.update(delta);
+        if(BitgeonGame.INSTANCE.getScreen() == null) {
+            player.update(delta);
+        }
     }
 
     public BlockTile getBlockAt(int x, int y) {

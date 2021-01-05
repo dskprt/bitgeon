@@ -7,6 +7,7 @@ import com.github.dskprt.bitgeon.input.Keyboard;
 import com.github.dskprt.bitgeon.input.Mouse;
 import com.github.dskprt.bitgeon.tile.Tile;
 import com.github.dskprt.bitgeon.tile.TileMap;
+import com.github.dskprt.bitgeon.tile.TileMaps;
 import com.github.dskprt.bitgeon.util.GameState;
 import com.github.dskprt.bitgeon.util.Timer;
 
@@ -21,7 +22,9 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.Map;
 import java.util.Random;
@@ -152,7 +155,14 @@ public class BitgeonGame {
         Keyboard.poll();
         Mouse.poll();
 
-        if(level != null) level.update(delta);
+        if(level != null) {
+            if(screen == null) {
+                level.update(delta);
+            } else if(!screen.doesScreenPauseGame()) {
+                level.update(delta);
+            }
+        }
+
         if(screen != null) screen.update(delta);
     }
 
@@ -187,5 +197,19 @@ public class BitgeonGame {
     public void setScreen(Screen screen) {
         if(screen != null) screen.init();
         this.screen = screen;
+    }
+
+    public void loadLevel(String name) {
+        new Thread(() -> {
+            try {
+                BitgeonGame.INSTANCE.level = TileMaps.loadMap(new File(TitleScreen.class.getResource("/levels/" + name).toURI()));
+            } catch(URISyntaxException e) {
+                e.printStackTrace();
+                BitgeonGame.INSTANCE.setState(GameState.STOPPED);
+            }
+
+            BitgeonGame.INSTANCE.setScreen(null);
+            BitgeonGame.INSTANCE.setState(GameState.INGAME);
+        }, "Level loading thread").start();
     }
 }

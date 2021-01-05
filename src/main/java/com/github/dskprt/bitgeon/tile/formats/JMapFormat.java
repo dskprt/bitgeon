@@ -1,8 +1,9 @@
 package com.github.dskprt.bitgeon.tile.formats;
 
-import com.github.dskprt.bitgeon.tile.ITileMapFormat;
+import com.github.dskprt.bitgeon.BitgeonGame;
+import com.github.dskprt.bitgeon.gui.screens.LevelLoadingScreen;
+import com.github.dskprt.bitgeon.tile.TileMapFormat;
 import com.github.dskprt.bitgeon.tile.TileMap;
-import com.github.dskprt.bitgeon.tile.block.BlockTile;
 import com.github.dskprt.bitgeon.tile.block.Blocks;
 import com.github.dskprt.bitgeon.tile.entity.Entities;
 import com.github.dskprt.bitgeon.util.GZipUtil;
@@ -15,12 +16,17 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 
-public class JMapFormat implements ITileMapFormat {
+public class JMapFormat extends TileMapFormat {
 
     public static final byte[] MAGIC = { 74, 77, 52, 80, 33 };
 
     @Override
     public TileMap parse(File file) throws Exception {
+        reset();
+        levelName = getBaseName(file.getName());
+
+        BitgeonGame.INSTANCE.setScreen(new LevelLoadingScreen(this));
+
         byte[] buffer = Files.readAllBytes(file.toPath());
 
         if(!Arrays.equals(Arrays.copyOfRange(buffer, 0, MAGIC.length), MAGIC)) {
@@ -46,9 +52,12 @@ public class JMapFormat implements ITileMapFormat {
                 int spawnX = json.getInt("x");
                 int spawnY = json.getInt("y");
 
-                map = new TileMap(getBaseName(file.getName()), width, height, new Vector2f(spawnX, spawnY));
+                map = new TileMap(levelName, width, height, new Vector2f(spawnX, spawnY));
 
                 JSONArray blocks = json.getJSONArray("b");
+                blockCount = blocks.length();
+
+                state = State.LOADING_BLOCKS;
 
                 for(int i = 0; i < blocks.length(); i++) {
                     JSONObject block = blocks.getJSONObject(i);
@@ -61,9 +70,13 @@ public class JMapFormat implements ITileMapFormat {
                     int index = (y * width) + x;
 
                     map.blocks.set(index, Blocks.createBlockFromId(map, id, new Vector2f(x, y), data));
+                    blocksLoaded++;
                 }
 
                 JSONArray entities = json.getJSONArray("e");
+                entityCount = entities.length();
+
+                state = State.LOADING_ENTITIES;
 
                 for(int i = 0; i < entities.length(); i++) {
                     JSONObject entity = entities.getJSONObject(i);
@@ -76,7 +89,10 @@ public class JMapFormat implements ITileMapFormat {
                     int index = (y * width) + x;
 
                     map.entities.set(index, Entities.createEntityFromId(map, id, new Vector2f(x, y), data));
+                    entitiesLoaded++;
                 }
+
+                state = State.FINISHED;
                 break;
         }
 

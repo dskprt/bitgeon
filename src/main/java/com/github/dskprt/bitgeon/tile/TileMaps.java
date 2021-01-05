@@ -3,14 +3,13 @@ package com.github.dskprt.bitgeon.tile;
 import com.github.dskprt.bitgeon.tile.formats.JMapFormat;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TileMaps {
 
     private static final Map<String, TileMap> CACHE = new HashMap<>();
-    public static final Map<String, ITileMapFormat> FORMATS = new HashMap<>();
+    public static final Map<String, TileMapFormat> FORMATS = new HashMap<>();
 
     static {
         FORMATS.put(".jmap", new JMapFormat());
