@@ -1,17 +1,26 @@
-package com.github.dskprt.bitgeon.tile;
+package com.github.dskprt.bitgeon.level;
 
 import com.github.dskprt.bitgeon.BitgeonGame;
-import com.github.dskprt.bitgeon.tile.block.BlockTile;
-import com.github.dskprt.bitgeon.tile.entity.EntityTile;
+import com.github.dskprt.bitgeon.level.formats.JMapFormat;
+import com.github.dskprt.bitgeon.tile.Tile;
+import com.github.dskprt.bitgeon.tile.block.Block;
+import com.github.dskprt.bitgeon.tile.entity.Entity;
 import com.github.dskprt.bitgeon.tile.entity.entities.PlayerEntity;
 
 import javax.vecmath.Vector2f;
 import java.awt.*;
-import java.io.IOException;
+import java.io.File;
 import java.util.*;
 import java.util.List;
 
-public class TileMap {
+public class Level {
+
+    private static final Map<String, Level> CACHE = new HashMap<>();
+    public static final Map<String, LevelFormat> FORMATS = new HashMap<>();
+
+    static {
+        FORMATS.put(".jmap", new JMapFormat());
+    }
 
     public final String name;
 
@@ -19,10 +28,10 @@ public class TileMap {
     public final int height;
 
     public PlayerEntity player;
-    public List<BlockTile> blocks;
-    public List<EntityTile> entities;
+    public List<Block> blocks;
+    public List<Entity> entities;
 
-    public TileMap(String name, int width, int height, Vector2f spawnPosition) {
+    public Level(String name, int width, int height, Vector2f spawnPosition) {
         this.name = name;
 
         this.width = width;
@@ -31,17 +40,13 @@ public class TileMap {
         this.blocks = new ArrayList<>(Collections.nCopies(width * height, null));
         this.entities = new ArrayList<>(Collections.nCopies(width * height, null));
 
-        try {
-            this.player = new PlayerEntity(this, spawnPosition);
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
+        this.player = new PlayerEntity(this, spawnPosition);
     }
 
     public void render(Graphics2D g2d, float offsetX, float offsetY) {
-        List<BlockTile> blocks0 = new ArrayList<>(blocks);
+        List<Block> blocks0 = new ArrayList<>(blocks);
 
-        for(BlockTile block : blocks0) {
+        for(Block block : blocks0) {
             if(block != null) {
                 double screenX = offsetX + (block.coordinates.x * Tile.TILE_WIDTH);
                 double screenY = offsetY + (block.coordinates.y * Tile.TILE_HEIGHT);
@@ -53,9 +58,9 @@ public class TileMap {
             }
         }
 
-        List<EntityTile> entities0 = new ArrayList<>(entities);
+        List<Entity> entities0 = new ArrayList<>(entities);
 
-        for(EntityTile entity : entities0) {
+        for(Entity entity : entities0) {
             if(entity != null) {
                 double screenX = offsetX + (entity.coordinates.x * Tile.TILE_WIDTH);
                 double screenY = offsetY + (entity.coordinates.y * Tile.TILE_HEIGHT);
@@ -71,15 +76,15 @@ public class TileMap {
     }
 
     public void update(double delta) {
-        List<BlockTile> blocks0 = new ArrayList<>(blocks);
+        List<Block> blocks0 = new ArrayList<>(blocks);
 
-        for(BlockTile block : blocks0) {
+        for(Block block : blocks0) {
             if(block != null) block.update(delta);
         }
 
-        List<EntityTile> entities0 = new ArrayList<>(entities);
+        List<Entity> entities0 = new ArrayList<>(entities);
 
-        for(EntityTile entity : entities0) {
+        for(Entity entity : entities0) {
             if(entity != null) entity.update(delta);
         }
 
@@ -88,7 +93,7 @@ public class TileMap {
         }
     }
 
-    public BlockTile getBlockAt(int x, int y) {
+    public Block getBlockAt(int x, int y) {
         int index = (y * width) + x;
 
         if(index < 0 || index >= blocks.size()) return null;
@@ -96,17 +101,17 @@ public class TileMap {
         return blocks.get(index);
     }
 
-    public BlockTile[] getBlocksAround(int x, int y) {
+    public Block[] getBlocksAround(int x, int y) {
         int[][] coords = { { x - 1, y - 1 }, { x, y - 1 }, { x + 1, y - 1 },
                            { x - 1, y },                   { x + 1, y },
                            { x - 1, y + 1 }, { x, y + 1 }, { x + 1, y + 1 } };
 
-        return new BlockTile[] { getBlockAt(coords[0][0], coords[0][1]), getBlockAt(coords[1][0], coords[1][1]), getBlockAt(coords[2][0], coords[2][1]),
+        return new Block[] { getBlockAt(coords[0][0], coords[0][1]), getBlockAt(coords[1][0], coords[1][1]), getBlockAt(coords[2][0], coords[2][1]),
                 getBlockAt(coords[3][0], coords[3][1]), getBlockAt(coords[4][0], coords[4][1]), getBlockAt(coords[5][0], coords[5][1]),
                 getBlockAt(coords[6][0], coords[6][1]), getBlockAt(coords[7][0], coords[7][1]) };
     }
 
-    public EntityTile getEntityAt(int x, int y) {
+    public Entity getEntityAt(int x, int y) {
         int index = (y * width) + x;
 
         if(index < 1 || index >= entities.size()) return null;
@@ -114,13 +119,33 @@ public class TileMap {
         return entities.get(index);
     }
 
-    public EntityTile[] getEntitiesAround(int x, int y) {
+    public Entity[] getEntitiesAround(int x, int y) {
         int[][] coords = { { x - 1, y - 1 }, { x, y - 1 }, { x + 1, y - 1 },
                 { x - 1, y },                   { x + 1, y },
                 { x - 1, y + 1 }, { x, y + 1 }, { x + 1, y + 1 } };
 
-        return new EntityTile[] { getEntityAt(coords[0][0], coords[0][1]), getEntityAt(coords[1][0], coords[1][1]), getEntityAt(coords[2][0], coords[2][1]),
+        return new Entity[] { getEntityAt(coords[0][0], coords[0][1]), getEntityAt(coords[1][0], coords[1][1]), getEntityAt(coords[2][0], coords[2][1]),
                 getEntityAt(coords[3][0], coords[3][1]), getEntityAt(coords[4][0], coords[4][1]), getEntityAt(coords[5][0], coords[5][1]),
                 getEntityAt(coords[6][0], coords[6][1]), getEntityAt(coords[7][0], coords[7][1]) };
+    }
+
+    public static Level load(File file) {
+        String path = file.getAbsolutePath();
+
+        if(CACHE.containsKey(path)) {
+            return CACHE.get(path);
+        }
+
+        try {
+            Level map = FORMATS.get(file.getName().substring(file.getName().lastIndexOf('.'))).parse(file);
+
+            CACHE.put(path, map);
+
+            return map;
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

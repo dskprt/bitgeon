@@ -3,13 +3,11 @@ package com.github.dskprt.bitgeon.gui.components;
 import com.github.dskprt.bitgeon.BitgeonGame;
 import com.github.dskprt.bitgeon.gui.Component;
 import com.github.dskprt.bitgeon.gui.Screen;
-import com.github.dskprt.bitgeon.input.Keyboard;
 import com.github.dskprt.bitgeon.util.FontUtil;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.Rectangle2D;
 
 //TODO change cursor position with arrow keys
 public class TextBox extends Component {

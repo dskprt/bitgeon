@@ -3,18 +3,16 @@ package com.github.dskprt.bitgeon.tile.entity.entities;
 import com.github.dskprt.bitgeon.BitgeonGame;
 import com.github.dskprt.bitgeon.input.Mouse;
 import com.github.dskprt.bitgeon.tile.Tile;
-import com.github.dskprt.bitgeon.tile.TileMap;
-import com.github.dskprt.bitgeon.tile.block.BlockTile;
+import com.github.dskprt.bitgeon.level.Level;
 import com.github.dskprt.bitgeon.tile.block.blocks.GrassBlock;
-import com.github.dskprt.bitgeon.tile.entity.EntityTile;
+import com.github.dskprt.bitgeon.tile.entity.Entity;
 
 import javax.vecmath.Vector2f;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
 
-public class BulletEntity extends EntityTile {
+public class BulletEntity extends Entity {
 
     private static final float moveSpeed = 0.3f;
 
@@ -23,11 +21,11 @@ public class BulletEntity extends EntityTile {
     public float damage;
     private final float xVel, yVel;
 
-    public BulletEntity(TileMap parent, Vector2f coordinates, float damage, byte data) throws IOException {
+    public BulletEntity(Level parent, Vector2f coordinates, float damage, byte data) {
         this(parent, coordinates, new Vector2f(Mouse.getScaledPosition().x, Mouse.getScaledPosition().y), damage, data);
     }
 
-    public BulletEntity(TileMap parent, Vector2f coordinates, Vector2f destination, float damage, byte data) throws IOException {
+    public BulletEntity(Level parent, Vector2f coordinates, Vector2f destination, float damage, byte data) {
         super(parent, "bullet", coordinates, new Rectangle2D.Float(8, 8, 4, 4), false, false, data);
 
         if(data == 1) {
@@ -85,11 +83,7 @@ public class BulletEntity extends EntityTile {
 
                 int index = ((int)tile.coordinates.y * parent.width) + (int)tile.coordinates.x;
 
-                try {
-                    parent.blocks.set(index, new GrassBlock(parent, new Vector2f(tile.coordinates)));
-                } catch(IOException e) {
-                    e.printStackTrace();
-                }
+                parent.blocks.set(index, new GrassBlock(parent, new Vector2f(tile.coordinates)));
             }
         }
 
@@ -100,7 +94,7 @@ public class BulletEntity extends EntityTile {
                 System.out.println("Hit entity! " + tile.coordinates.toString());
                 parent.entities.remove(this);
 
-                ((EntityTile) tile).health -= damage;
+                ((Entity) tile).health -= damage;
             }
         }
 

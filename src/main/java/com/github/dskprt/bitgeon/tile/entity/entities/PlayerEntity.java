@@ -6,9 +6,9 @@ import com.github.dskprt.bitgeon.input.Mouse;
 import com.github.dskprt.bitgeon.item.Item;
 import com.github.dskprt.bitgeon.item.items.PistolItem;
 import com.github.dskprt.bitgeon.item.items.ShotgunItem;
-import com.github.dskprt.bitgeon.tile.TileMap;
-import com.github.dskprt.bitgeon.tile.block.BlockTile;
-import com.github.dskprt.bitgeon.tile.entity.EntityTile;
+import com.github.dskprt.bitgeon.level.Level;
+import com.github.dskprt.bitgeon.tile.block.Block;
+import com.github.dskprt.bitgeon.tile.entity.Entity;
 import com.github.dskprt.bitgeon.tile.entity.inventory.Inventory;
 import com.github.dskprt.bitgeon.util.Facing;
 import com.github.dskprt.bitgeon.util.FontUtil;
@@ -20,9 +20,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
 
-public class PlayerEntity extends EntityTile {
+public class PlayerEntity extends Entity {
 
     private static final Color SELECTION_COLOR = Color.RED;
 
@@ -34,7 +33,7 @@ public class PlayerEntity extends EntityTile {
     private Ray blockSelectionRay;
     private Ray entitySelectionRay;
 
-    public PlayerEntity(TileMap parent, Vector2f coordinates) throws IOException {
+    public PlayerEntity(Level parent, Vector2f coordinates) {
         super(parent, "player", coordinates, new Rectangle2D.Float(4, 2, 12, 16), false, true, (byte) 0);
 
         inventory.items.put(Inventory.Slot.MAIN, new PistolItem(this, (byte) 0));
@@ -138,7 +137,7 @@ public class PlayerEntity extends EntityTile {
                 Rectangle2D.Float playerRect = new Rectangle2D.Float((coordinates.x * TILE_WIDTH) + collisionBox.x,
                         (coordinates.y * TILE_HEIGHT) + collisionBox.y - (float)mv * 5, collisionBox.width, collisionBox.height);
 
-                for(BlockTile block : parent.getBlocksAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
+                for(Block block : parent.getBlocksAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
                     if(block == null) continue;
                     if(block.coordinates.y > coordinates.y) continue;
 
@@ -151,7 +150,7 @@ public class PlayerEntity extends EntityTile {
                     }
                 }
 
-                for(EntityTile entity : parent.getEntitiesAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
+                for(Entity entity : parent.getEntitiesAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
                     if(entity == null) continue;
                     if(entity.coordinates.y > coordinates.y) continue;
 
@@ -179,7 +178,7 @@ public class PlayerEntity extends EntityTile {
                 Rectangle2D.Float playerRect = new Rectangle2D.Float((coordinates.x * TILE_WIDTH) + collisionBox.x,
                         (coordinates.y * TILE_HEIGHT) + collisionBox.y + (float)mv * 5, collisionBox.width, collisionBox.height);
 
-                for(BlockTile block : parent.getBlocksAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
+                for(Block block : parent.getBlocksAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
                     if(block == null) continue;
                     if(block.coordinates.y < coordinates.y) continue;
 
@@ -192,7 +191,7 @@ public class PlayerEntity extends EntityTile {
                     }
                 }
 
-                for(EntityTile entity : parent.getEntitiesAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
+                for(Entity entity : parent.getEntitiesAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
                     if(entity == null) continue;
                     if(entity.coordinates.y < coordinates.y) continue;
 
@@ -220,7 +219,7 @@ public class PlayerEntity extends EntityTile {
                 Rectangle2D.Float playerRect = new Rectangle2D.Float((coordinates.x * TILE_WIDTH) + collisionBox.x - (float)mv * 5,
                         (coordinates.y * TILE_HEIGHT) + collisionBox.y, collisionBox.width, collisionBox.height);
 
-                for(BlockTile block : parent.getBlocksAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
+                for(Block block : parent.getBlocksAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
                     if(block == null) continue;
                     if(block.coordinates.x > coordinates.x) continue;
 
@@ -233,7 +232,7 @@ public class PlayerEntity extends EntityTile {
                     }
                 }
 
-                for(EntityTile entity : parent.getEntitiesAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
+                for(Entity entity : parent.getEntitiesAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
                     if(entity == null) continue;
                     if(entity.coordinates.x > coordinates.x) continue;
 
@@ -261,7 +260,7 @@ public class PlayerEntity extends EntityTile {
                 Rectangle2D.Float playerRect = new Rectangle2D.Float((coordinates.x * TILE_WIDTH) + collisionBox.x + (float)mv * 5,
                         (coordinates.y * TILE_HEIGHT) + collisionBox.y, collisionBox.width, collisionBox.height);
 
-                for(BlockTile block : parent.getBlocksAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
+                for(Block block : parent.getBlocksAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
                     if(block == null) continue;
                     if(block.coordinates.x < coordinates.x) continue;
 
@@ -274,7 +273,7 @@ public class PlayerEntity extends EntityTile {
                     }
                 }
 
-                for(EntityTile entity : parent.getEntitiesAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
+                for(Entity entity : parent.getEntitiesAround(Math.round(coordinates.x), Math.round(coordinates.y))) {
                     if(entity == null) continue;
                     if(entity.coordinates.x < coordinates.x) continue;
 
@@ -298,7 +297,7 @@ public class PlayerEntity extends EntityTile {
         if(Keyboard.wasKeyClicked(KeyEvent.VK_E)) {
             if(entitySelectionRay != null) {
                 if(entitySelectionRay.getResult() != null) {
-                    EntityTile entity = (EntityTile) entitySelectionRay.getResult();
+                    Entity entity = (Entity) entitySelectionRay.getResult();
 
                     if(entity.canInteract) {
                         entity.interact();
@@ -309,7 +308,7 @@ public class PlayerEntity extends EntityTile {
 
             if(blockSelectionRay != null) {
                 if(blockSelectionRay.getResult() != null) {
-                    BlockTile block = (BlockTile) blockSelectionRay.getResult();
+                    Block block = (Block) blockSelectionRay.getResult();
 
                     if(block.canInteract) {
                         block.interact();

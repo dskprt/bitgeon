@@ -1,22 +1,19 @@
 package com.github.dskprt.bitgeon.tile.block.blocks;
 
 import com.github.dskprt.bitgeon.BitgeonGame;
-import com.github.dskprt.bitgeon.tile.TileMap;
-import com.github.dskprt.bitgeon.tile.TileMaps;
-import com.github.dskprt.bitgeon.tile.block.BlockTile;
+import com.github.dskprt.bitgeon.level.Level;
+import com.github.dskprt.bitgeon.tile.block.Block;
 import com.github.dskprt.bitgeon.util.GameState;
 
 import javax.vecmath.Vector2f;
 import java.io.File;
-import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.concurrent.atomic.AtomicReference;
 
-public class DoorBlock extends BlockTile {
+public class DoorBlock extends Block {
 
     private static Vector2f prevPos;
 
-    public DoorBlock(TileMap parent, Vector2f coordinates, byte data) throws IOException {
+    public DoorBlock(Level parent, Vector2f coordinates, byte data) {
         super(parent, "door", coordinates, true, true, data);
     }
 
@@ -44,7 +41,7 @@ public class DoorBlock extends BlockTile {
     }
 
     private void loadLevel(File file) {
-        TileMap level = TileMaps.loadMap(file);
+        Level level = Level.load(file);
 
         if(level == null) {
             System.out.println("Unexpected error. (level == null)");

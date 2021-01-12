@@ -1,9 +1,7 @@
 package com.github.dskprt.bitgeon.util;
 
 import com.github.dskprt.bitgeon.BitgeonGame;
-import com.github.dskprt.bitgeon.input.Mouse;
 import com.github.dskprt.bitgeon.tile.Tile;
-import com.github.dskprt.bitgeon.tile.block.BlockTile;
 
 import javax.vecmath.Vector2f;
 

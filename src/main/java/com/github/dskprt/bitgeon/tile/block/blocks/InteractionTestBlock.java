@@ -1,14 +1,13 @@
 package com.github.dskprt.bitgeon.tile.block.blocks;
 
-import com.github.dskprt.bitgeon.tile.TileMap;
-import com.github.dskprt.bitgeon.tile.block.BlockTile;
+import com.github.dskprt.bitgeon.level.Level;
+import com.github.dskprt.bitgeon.tile.block.Block;
 
 import javax.vecmath.Vector2f;
-import java.io.IOException;
 
-public class InteractionTestBlock extends BlockTile {
+public class InteractionTestBlock extends Block {
 
-    public InteractionTestBlock(TileMap parent, Vector2f coordinates) throws IOException {
+    public InteractionTestBlock(Level parent, Vector2f coordinates) {
         super(parent, "interaction_test", coordinates, true, true, (byte)0);
     }
 

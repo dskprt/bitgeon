@@ -4,15 +4,12 @@ import com.github.dskprt.bitgeon.BitgeonGame;
 import com.github.dskprt.bitgeon.gui.Screen;
 import com.github.dskprt.bitgeon.gui.components.Label;
 import com.github.dskprt.bitgeon.input.Keyboard;
-import com.github.dskprt.bitgeon.tile.TileMaps;
 import com.github.dskprt.bitgeon.util.FontUtil;
 import com.github.dskprt.bitgeon.util.GameState;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
-import java.net.URISyntaxException;
 
 public class TitleScreen extends Screen {
 

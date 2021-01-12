@@ -1,5 +1,7 @@
 package com.github.dskprt.bitgeon.tile;
 
+import com.github.dskprt.bitgeon.level.Level;
+
 import javax.vecmath.Vector2f;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -11,18 +13,18 @@ public class Tile {
     public static final int TILE_WIDTH = 20;
     public static final int TILE_HEIGHT = 20;
 
-    public TileMap parent;
+    public Level parent;
     public String id;
     public BufferedImage image;
     public Vector2f coordinates;
     public Rectangle2D.Float collisionBox;
     public boolean canCollide;
 
-    public Tile(TileMap parent, String id, BufferedImage image, Vector2f coordinates, boolean canCollide) {
+    public Tile(Level parent, String id, BufferedImage image, Vector2f coordinates, boolean canCollide) {
         this(parent, id, image, coordinates, new Rectangle2D.Float(0, 0, TILE_WIDTH, TILE_HEIGHT), canCollide);
     }
 
-    public Tile(TileMap parent, String id, BufferedImage image, Vector2f coordinates, Rectangle2D.Float collisionBox, boolean canCollide) {
+    public Tile(Level parent, String id, BufferedImage image, Vector2f coordinates, Rectangle2D.Float collisionBox, boolean canCollide) {
         this.parent = parent;
         this.id = id;
         this.image = image;

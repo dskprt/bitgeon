@@ -3,7 +3,7 @@ package com.github.dskprt.bitgeon.gui.screens;
 import com.github.dskprt.bitgeon.BitgeonGame;
 import com.github.dskprt.bitgeon.gui.Screen;
 import com.github.dskprt.bitgeon.gui.components.Label;
-import com.github.dskprt.bitgeon.tile.TileMapFormat;
+import com.github.dskprt.bitgeon.level.LevelFormat;
 import com.github.dskprt.bitgeon.util.FontUtil;
 
 import java.awt.*;
@@ -13,11 +13,11 @@ public class LevelLoadingScreen extends Screen {
 
     private static final String INFO = "[reading %s (%d/%d)]";
 
-    private TileMapFormat format;
+    private LevelFormat format;
 
     private Label infoLabel;
 
-    public LevelLoadingScreen(TileMapFormat format) {
+    public LevelLoadingScreen(LevelFormat format) {
         this.format = format;
     }
 
@@ -42,11 +42,11 @@ public class LevelLoadingScreen extends Screen {
     public void update(double delta) {
         String info = "";
 
-        if(format.state == TileMapFormat.State.LOADING_BLOCKS) {
+        if(format.state == LevelFormat.State.LOADING_BLOCKS) {
             info = String.format(INFO, "block", format.blocksLoaded + 1, format.blockCount);
-        } else if(format.state == TileMapFormat.State.LOADING_ENTITIES) {
+        } else if(format.state == LevelFormat.State.LOADING_ENTITIES) {
             info = String.format(INFO, "entity", format.entitiesLoaded + 1, format.entityCount);
-        } else if(format.state == TileMapFormat.State.FINISHED) {
+        } else if(format.state == LevelFormat.State.FINISHED) {
             info = "Finished!";
         }
 

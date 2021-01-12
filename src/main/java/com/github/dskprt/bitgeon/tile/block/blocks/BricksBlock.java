@@ -5,9 +5,9 @@ import com.github.dskprt.bitgeon.tile.block.Block;
 
 import javax.vecmath.Vector2f;
 
-public class AirBlock extends Block {
+public class BricksBlock extends Block {
 
-    public AirBlock(Level parent, Vector2f coordinates) {
-        super(parent, "air", coordinates, false, false, (byte) 0);
+    public BricksBlock(Level parent, Vector2f coordinates) {
+        super(parent, "bricks", coordinates, false, true, (byte) 0);
     }
 }

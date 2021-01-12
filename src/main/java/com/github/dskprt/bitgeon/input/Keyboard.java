@@ -70,6 +70,7 @@ public class Keyboard implements KeyListener {
     public void keyTyped(KeyEvent e) { }
 
     public enum KeyState {
+
         RELEASED,
         PRESSED,
         CLICKED

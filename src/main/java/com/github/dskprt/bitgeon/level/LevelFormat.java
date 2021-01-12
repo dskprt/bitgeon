@@ -1,9 +1,8 @@
-package com.github.dskprt.bitgeon.tile;
+package com.github.dskprt.bitgeon.level;
 
 import java.io.File;
-import java.io.IOException;
 
-public abstract class TileMapFormat {
+public abstract class LevelFormat {
 
     public String levelName;
 
@@ -14,7 +13,7 @@ public abstract class TileMapFormat {
 
     public State state = State.OTHER;
 
-    public abstract TileMap parse(File file) throws Exception;
+    public abstract Level parse(File file) throws Exception;
 
     protected void reset() {
         levelName = null;

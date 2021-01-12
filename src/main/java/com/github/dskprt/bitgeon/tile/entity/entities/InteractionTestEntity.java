@@ -1,14 +1,13 @@
 package com.github.dskprt.bitgeon.tile.entity.entities;
 
-import com.github.dskprt.bitgeon.tile.TileMap;
-import com.github.dskprt.bitgeon.tile.entity.EntityTile;
+import com.github.dskprt.bitgeon.level.Level;
+import com.github.dskprt.bitgeon.tile.entity.Entity;
 
 import javax.vecmath.Vector2f;
-import java.io.IOException;
 
-public class InteractionTestEntity extends EntityTile {
+public class InteractionTestEntity extends Entity {
 
-    public InteractionTestEntity(TileMap parent, Vector2f coordinates) throws IOException {
+    public InteractionTestEntity(Level parent, Vector2f coordinates) {
         super(parent, "interaction_test", coordinates, true, true, (byte)0);
     }
 

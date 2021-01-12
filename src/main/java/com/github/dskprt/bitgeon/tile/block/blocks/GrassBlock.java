@@ -1,14 +1,13 @@
 package com.github.dskprt.bitgeon.tile.block.blocks;
 
-import com.github.dskprt.bitgeon.tile.TileMap;
-import com.github.dskprt.bitgeon.tile.block.BlockTile;
+import com.github.dskprt.bitgeon.level.Level;
+import com.github.dskprt.bitgeon.tile.block.Block;
 
 import javax.vecmath.Vector2f;
-import java.io.IOException;
 
-public class GrassBlock extends BlockTile {
+public class GrassBlock extends Block {
 
-    public GrassBlock(TileMap parent, Vector2f coordinates) throws IOException {
+    public GrassBlock(Level parent, Vector2f coordinates) {
         super(parent, "grass", coordinates, false, false, (byte)0);
     }
 }

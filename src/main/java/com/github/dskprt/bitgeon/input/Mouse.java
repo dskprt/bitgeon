@@ -92,6 +92,7 @@ public class Mouse implements MouseListener, MouseMotionListener {
     public void mouseClicked(MouseEvent e) { }
 
     public enum MouseButtonState {
+        
         RELEASED,
         PRESSED,
         CLICKED

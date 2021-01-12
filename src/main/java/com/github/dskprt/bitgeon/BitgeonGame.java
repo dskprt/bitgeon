@@ -6,28 +6,18 @@ import com.github.dskprt.bitgeon.gui.screens.TitleScreen;
 import com.github.dskprt.bitgeon.input.Keyboard;
 import com.github.dskprt.bitgeon.input.Mouse;
 import com.github.dskprt.bitgeon.tile.Tile;
-import com.github.dskprt.bitgeon.tile.TileMap;
-import com.github.dskprt.bitgeon.tile.TileMaps;
+import com.github.dskprt.bitgeon.level.Level;
 import com.github.dskprt.bitgeon.util.GameState;
 import com.github.dskprt.bitgeon.util.Timer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
 import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.util.Map;
-import java.util.Random;
 
 public class BitgeonGame {
 
@@ -54,7 +44,7 @@ public class BitgeonGame {
     public FontRenderContext fontRenderContext;
     public FontMetrics fontMetrics;
 
-    public TileMap level;
+    public Level level;
 
     public BitgeonGame(GameConfiguration config) {
         INSTANCE = this;
@@ -202,7 +192,7 @@ public class BitgeonGame {
     public void loadLevel(String name) {
         new Thread(() -> {
             try {
-                BitgeonGame.INSTANCE.level = TileMaps.loadMap(new File(TitleScreen.class.getResource("/levels/" + name).toURI()));
+                BitgeonGame.INSTANCE.level = Level.load(new File(TitleScreen.class.getResource("/levels/" + name).toURI()));
             } catch(URISyntaxException e) {
                 e.printStackTrace();
                 BitgeonGame.INSTANCE.setState(GameState.STOPPED);
