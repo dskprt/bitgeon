@@ -1,22 +1,33 @@
-package com.github.dskprt.bitgeon.tile.entity.inventory;
+package com.github.dskprt.bitgeon.object.entity.inventory;
 
 import com.github.dskprt.bitgeon.item.Item;
-import com.github.dskprt.bitgeon.tile.entity.Entity;
+import com.github.dskprt.bitgeon.object.entity.EntityObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Inventory {
 
-    public Entity parent;
+    public EntityObject parent;
     public Map<Integer, Item> items;
 
-    public Inventory(Entity parent, Map<Integer, Item> items) {
-        this.parent = parent;
-        this.items = items;
+    public int selectedSlot;
+
+    public Inventory(EntityObject parent, Map<Integer, Item> items) {
+        this(parent, items, 0);
     }
 
-    public static Inventory empty(Entity parent) {
+    public Inventory(EntityObject parent, Map<Integer, Item> items, int selectedSlot) {
+        this.parent = parent;
+        this.items = items;
+        this.selectedSlot = selectedSlot;
+    }
+
+    public Item getSelectedItem() {
+        return items.get(selectedSlot);
+    }
+
+    public static Inventory empty(EntityObject parent) {
         return new Inventory(parent, new HashMap<>());
     }
 

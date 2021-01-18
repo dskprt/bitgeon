@@ -1,20 +1,20 @@
-package com.github.dskprt.bitgeon.tile.block.blocks;
+package com.github.dskprt.bitgeon.object.block.blocks;
 
 import com.github.dskprt.bitgeon.BitgeonGame;
 import com.github.dskprt.bitgeon.level.Level;
-import com.github.dskprt.bitgeon.tile.block.Block;
+import com.github.dskprt.bitgeon.object.block.BlockObject;
 import com.github.dskprt.bitgeon.util.GameState;
 
-import javax.vecmath.Vector2f;
 import java.io.File;
 import java.net.URISyntaxException;
 
-public class DoorBlock extends Block {
+public class DoorBlock extends BlockObject {
 
-    private static Vector2f prevPos;
+    private static float prevX = Float.MIN_VALUE;
+    private static float prevY = Float.MIN_VALUE;
 
-    public DoorBlock(Level parent, Vector2f coordinates, byte data) {
-        super(parent, "door", coordinates, true, true, data);
+    public DoorBlock(Level parent, float x, float y, float z, byte data) {
+        super(parent, "door", x, y, z, true, data);
     }
 
     @Override
@@ -49,11 +49,14 @@ public class DoorBlock extends Block {
             return;
         }
 
-        if(prevPos != null) {
-            level.player.coordinates = prevPos;
+        if(prevX != Float.MIN_VALUE && prevY != Float.MIN_VALUE) {
+            level.player.x = prevX;
+            level.player.y = prevY;
         }
 
-        prevPos = BitgeonGame.INSTANCE.level.player.coordinates;
+        prevX = BitgeonGame.INSTANCE.level.player.x;
+        prevY = BitgeonGame.INSTANCE.level.player.y;
+
         BitgeonGame.INSTANCE.level = level;
         BitgeonGame.INSTANCE.setScreen(null);
     }

@@ -157,8 +157,8 @@ public class BitgeonGame {
     }
 
     private void render(Graphics2D g2d) {
-        if(level != null) level.render(g2d, BitgeonGame.WIDTH / 2f - (level.player.coordinates.x * Tile.TILE_WIDTH) - Tile.TILE_WIDTH / 2f,
-                BitgeonGame.HEIGHT / 2f - (level.player.coordinates.y * Tile.TILE_HEIGHT) - Tile.TILE_HEIGHT / 2f);
+        if(level != null) level.render(g2d, BitgeonGame.WIDTH / 2f - level.player.x - level.player.width / 2f,
+                BitgeonGame.HEIGHT / 2f - level.player.y - level.player.height / 2f);
 
         if(screen != null) screen.render(g2d);
 

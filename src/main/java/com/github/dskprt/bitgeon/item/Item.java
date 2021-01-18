@@ -1,10 +1,8 @@
 package com.github.dskprt.bitgeon.item;
 
 import com.github.dskprt.bitgeon.BitgeonGame;
-import com.github.dskprt.bitgeon.item.items.PistolItem;
-import com.github.dskprt.bitgeon.item.items.ShotgunItem;
-import com.github.dskprt.bitgeon.tile.block.Block;
-import com.github.dskprt.bitgeon.tile.entity.Entity;
+import com.github.dskprt.bitgeon.item.items.*;
+import com.github.dskprt.bitgeon.object.entity.EntityObject;
 import com.github.dskprt.bitgeon.util.GameState;
 
 import javax.imageio.ImageIO;
@@ -26,21 +24,21 @@ public abstract class Item {
         REGISTRY.put("shotgun", ShotgunItem.class);
     }
 
-    public Entity parent;
+    public EntityObject parent;
     public String id;
     public Type type;
     public byte data;
 
     public BufferedImage image;
 
-    public Item(Entity parent, String id, Type type, byte data) {
+    public Item(EntityObject parent, String id, Type type, byte data) {
         this.parent = parent;
         this.id = id;
         this.type = type;
         this.data = data;
 
         try {
-            this.image = ImageIO.read(Block.class.getResourceAsStream("/textures/items/" + id + ".png"));
+            this.image = ImageIO.read(Item.class.getResourceAsStream("/textures/items/" + id + ".png"));
         } catch(IOException e) {
             e.printStackTrace();
             BitgeonGame.INSTANCE.setState(GameState.STOPPED);
@@ -49,14 +47,14 @@ public abstract class Item {
 
     public abstract void use();
 
-    public static Item createItemFromId(Entity parent, String id, byte data) {
+    public static Item createItemFromId(EntityObject parent, String id, byte data) {
         try {
-            return REGISTRY.get(id).getDeclaredConstructor(Entity.class).newInstance(parent);
+            return REGISTRY.get(id).getDeclaredConstructor(EntityObject.class).newInstance(parent);
         } catch(NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
 
             try {
-                return REGISTRY.get(id).getDeclaredConstructor(Entity.class, byte.class).newInstance(parent, data);
+                return REGISTRY.get(id).getDeclaredConstructor(EntityObject.class, byte.class).newInstance(parent, data);
             } catch(NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
                 ex.printStackTrace();
             }
@@ -74,7 +72,7 @@ public abstract class Item {
 
         public float healing;
 
-        public Food(Entity parent, String id, float healing, byte data) {
+        public Food(EntityObject parent, String id, float healing, byte data) {
             super(parent, id, Type.FOOD, data);
             this.healing = healing;
         }
@@ -82,7 +80,7 @@ public abstract class Item {
 
     public abstract static class Potion extends Item {
 
-        public Potion(Entity parent, String id, byte data) {
+        public Potion(EntityObject parent, String id, byte data) {
             super(parent, id, Type.POTION, data);
         }
     }
@@ -91,7 +89,7 @@ public abstract class Item {
 
         public float damage;
 
-        public Weapon(Entity parent, String id, float damage, byte data) {
+        public Weapon(EntityObject parent, String id, float damage, byte data) {
             super(parent, id, Type.WEAPON, data);
             this.damage = damage;
         }

@@ -2,13 +2,14 @@ package com.github.dskprt.bitgeon.level;
 
 import com.github.dskprt.bitgeon.BitgeonGame;
 import com.github.dskprt.bitgeon.level.formats.JMapFormat;
+import com.github.dskprt.bitgeon.object.GameObject;
+import com.github.dskprt.bitgeon.object.block.BlockObject;
+import com.github.dskprt.bitgeon.object.entity.EntityObject;
 import com.github.dskprt.bitgeon.tile.Tile;
-import com.github.dskprt.bitgeon.tile.block.Block;
-import com.github.dskprt.bitgeon.tile.entity.Entity;
-import com.github.dskprt.bitgeon.tile.entity.entities.PlayerEntity;
+import com.github.dskprt.bitgeon.object.entity.entities.PlayerEntity;
 
-import javax.vecmath.Vector2f;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.util.*;
 import java.util.List;
@@ -28,63 +29,71 @@ public class Level {
     public final int height;
 
     public PlayerEntity player;
-    public List<Block> blocks;
-    public List<Entity> entities;
 
-    public Level(String name, int width, int height, Vector2f spawnPosition) {
+    public List<BlockObject> blocks;
+    public List<EntityObject> entities;
+    public List<GameObject> objects;
+
+    public Level(String name, int width, int height, float spawnX, float spawnY, float spawnZ) {
         this.name = name;
 
         this.width = width;
         this.height = height;
 
-        this.blocks = new ArrayList<>(Collections.nCopies(width * height, null));
-        this.entities = new ArrayList<>(Collections.nCopies(width * height, null));
+        this.blocks = new ArrayList<>();
+        this.entities = new ArrayList<>();
+        this.objects = new ArrayList<>();
 
-        this.player = new PlayerEntity(this, spawnPosition);
+        this.player = new PlayerEntity(this, spawnX, spawnY, spawnZ);
     }
 
     public void render(Graphics2D g2d, float offsetX, float offsetY) {
-        List<Block> blocks0 = new ArrayList<>(blocks);
+        AffineTransform transform = g2d.getTransform();
+        g2d.translate(offsetX, offsetY);
 
-        for(Block block : blocks0) {
+        List<BlockObject> blocks0 = new ArrayList<>(blocks);
+
+        for(BlockObject block : blocks0) {
             if(block != null) {
-                double screenX = offsetX + (block.coordinates.x * Tile.TILE_WIDTH);
-                double screenY = offsetY + (block.coordinates.y * Tile.TILE_HEIGHT);
+                double screenX = offsetX + block.x;
+                double screenY = offsetY + block.y;
 
                 if(screenX + Tile.TILE_WIDTH < 0 || screenY + Tile.TILE_HEIGHT < 0
                         || screenX > BitgeonGame.WIDTH || screenY > BitgeonGame.HEIGHT) continue;
 
-                block.render(g2d, offsetX, offsetY);
+                block.render(g2d);
             }
         }
 
-        List<Entity> entities0 = new ArrayList<>(entities);
+        List<EntityObject> entities0 = new ArrayList<>(entities);
 
-        for(Entity entity : entities0) {
+        for(EntityObject entity : entities0) {
             if(entity != null) {
-                double screenX = offsetX + (entity.coordinates.x * Tile.TILE_WIDTH);
-                double screenY = offsetY + (entity.coordinates.y * Tile.TILE_HEIGHT);
+                double screenX = offsetX + entity.x;
+                double screenY = offsetY + entity.y;
 
                 if(screenX + Tile.TILE_WIDTH < 0 || screenY + Tile.TILE_HEIGHT < 0
                         || screenX > BitgeonGame.WIDTH || screenY > BitgeonGame.HEIGHT) continue;
 
-                entity.render(g2d, offsetX, offsetY);
+                entity.render(g2d);
             }
         }
 
-        player.render(g2d, offsetX, offsetY);
+        player.render(g2d);
+
+        g2d.setTransform(transform);
     }
 
     public void update(double delta) {
-        List<Block> blocks0 = new ArrayList<>(blocks);
+        List<BlockObject> blocks0 = new ArrayList<>(blocks);
 
-        for(Block block : blocks0) {
+        for(BlockObject block : blocks0) {
             if(block != null) block.update(delta);
         }
 
-        List<Entity> entities0 = new ArrayList<>(entities);
+        List<EntityObject> entities0 = new ArrayList<>(entities);
 
-        for(Entity entity : entities0) {
+        for(EntityObject entity : entities0) {
             if(entity != null) entity.update(delta);
         }
 
@@ -93,41 +102,50 @@ public class Level {
         }
     }
 
-    public Block getBlockAt(int x, int y) {
-        int index = (y * width) + x;
+    public BlockObject getBlockAt(float x, float y) {
+        for(BlockObject block : blocks) {
+            if(block.x == x && block.y == y) {
+                return block;
+            }
+        }
 
-        if(index < 0 || index >= blocks.size()) return null;
-
-        return blocks.get(index);
+        return null;
     }
 
-    public Block[] getBlocksAround(int x, int y) {
-        int[][] coords = { { x - 1, y - 1 }, { x, y - 1 }, { x + 1, y - 1 },
-                           { x - 1, y },                   { x + 1, y },
-                           { x - 1, y + 1 }, { x, y + 1 }, { x + 1, y + 1 } };
+//    public BlockObject[] getBlocksAround(float x, float y) {
+//        float[][] coords = { { x - 1, y - 1 }, { x, y - 1 }, { x + 1, y - 1 },
+//                           { x - 1, y },                   { x + 1, y },
+//                           { x - 1, y + 1 }, { x, y + 1 }, { x + 1, y + 1 } };
+//
+//        return new BlockObject[] { getBlockAt(coords[0][0], coords[0][1]), getBlockAt(coords[1][0], coords[1][1]), getBlockAt(coords[2][0], coords[2][1]),
+//                getBlockAt(coords[3][0], coords[3][1]), getBlockAt(coords[4][0], coords[4][1]), getBlockAt(coords[5][0], coords[5][1]),
+//                getBlockAt(coords[6][0], coords[6][1]), getBlockAt(coords[7][0], coords[7][1]) };
+//    }
 
-        return new Block[] { getBlockAt(coords[0][0], coords[0][1]), getBlockAt(coords[1][0], coords[1][1]), getBlockAt(coords[2][0], coords[2][1]),
-                getBlockAt(coords[3][0], coords[3][1]), getBlockAt(coords[4][0], coords[4][1]), getBlockAt(coords[5][0], coords[5][1]),
-                getBlockAt(coords[6][0], coords[6][1]), getBlockAt(coords[7][0], coords[7][1]) };
+    public EntityObject getEntityAt(float x, float y) {
+        for(EntityObject entity : entities) {
+            if(entity.x == x && entity.y == y) {
+                return entity;
+            }
+        }
+
+        return null;
     }
 
-    public Entity getEntityAt(int x, int y) {
-        int index = (y * width) + x;
-
-        if(index < 1 || index >= entities.size()) return null;
-
-        return entities.get(index);
+    public EntityObject getCollidingObject(GameObject object) {
+        // TODO
+        return null;
     }
 
-    public Entity[] getEntitiesAround(int x, int y) {
-        int[][] coords = { { x - 1, y - 1 }, { x, y - 1 }, { x + 1, y - 1 },
-                { x - 1, y },                   { x + 1, y },
-                { x - 1, y + 1 }, { x, y + 1 }, { x + 1, y + 1 } };
-
-        return new Entity[] { getEntityAt(coords[0][0], coords[0][1]), getEntityAt(coords[1][0], coords[1][1]), getEntityAt(coords[2][0], coords[2][1]),
-                getEntityAt(coords[3][0], coords[3][1]), getEntityAt(coords[4][0], coords[4][1]), getEntityAt(coords[5][0], coords[5][1]),
-                getEntityAt(coords[6][0], coords[6][1]), getEntityAt(coords[7][0], coords[7][1]) };
-    }
+//    public EntityObject[] getEntitiesAround(float x, float y) {
+//        float[][] coords = { { x - 1, y - 1 }, { x, y - 1 }, { x + 1, y - 1 },
+//                { x - 1, y },                   { x + 1, y },
+//                { x - 1, y + 1 }, { x, y + 1 }, { x + 1, y + 1 } };
+//
+//        return new EntityObject[] { getEntityAt(coords[0][0], coords[0][1]), getEntityAt(coords[1][0], coords[1][1]), getEntityAt(coords[2][0], coords[2][1]),
+//                getEntityAt(coords[3][0], coords[3][1]), getEntityAt(coords[4][0], coords[4][1]), getEntityAt(coords[5][0], coords[5][1]),
+//                getEntityAt(coords[6][0], coords[6][1]), getEntityAt(coords[7][0], coords[7][1]) };
+//    }
 
     public static Level load(File file) {
         String path = file.getAbsolutePath();
