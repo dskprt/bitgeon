@@ -7,9 +7,8 @@ import com.github.dskprt.bitgeon.item.Item;
 import com.github.dskprt.bitgeon.item.items.PistolItem;
 import com.github.dskprt.bitgeon.item.items.ShotgunItem;
 import com.github.dskprt.bitgeon.level.Level;
+import com.github.dskprt.bitgeon.object.block.BlockObject;
 import com.github.dskprt.bitgeon.object.entity.EntityObject;
-import com.github.dskprt.bitgeon.tile.block.Block;
-import com.github.dskprt.bitgeon.tile.entity.Entity;
 import com.github.dskprt.bitgeon.object.entity.inventory.Inventory;
 import com.github.dskprt.bitgeon.util.Facing;
 import com.github.dskprt.bitgeon.util.FontUtil;
@@ -26,7 +25,7 @@ public class PlayerEntity extends EntityObject {
 
     private static final Color SELECTION_COLOR = Color.RED;
 
-    public double movementSpeed = 0.01;
+    public double movementSpeed = 0.1;
     public Facing facing = Facing.NORTH;
 
     public double rotation = 0;
@@ -63,8 +62,8 @@ public class PlayerEntity extends EntityObject {
             if(blockSelectionRay.getResult() != null) {
                 transform = g2d.getTransform();
 
-                g2d.translate(blockSelectionRay.getResult().coordinates.x,
-                        blockSelectionRay.getResult().coordinates.y);
+                g2d.translate(blockSelectionRay.getResult().x,
+                        blockSelectionRay.getResult().y);
 
                 g2d.setColor(SELECTION_COLOR);
                 g2d.drawRect(0, 0, width, height);
@@ -76,8 +75,8 @@ public class PlayerEntity extends EntityObject {
             if(entitySelectionRay.getResult() != null) {
                 transform = g2d.getTransform();
 
-                g2d.translate(entitySelectionRay.getResult().coordinates.x,
-                        entitySelectionRay.getResult().coordinates.y);
+                g2d.translate(entitySelectionRay.getResult().x,
+                        entitySelectionRay.getResult().y);
 
                 g2d.setColor(SELECTION_COLOR);
                 g2d.drawRect(0, 0, width, height);
@@ -132,8 +131,8 @@ public class PlayerEntity extends EntityObject {
         entitySelectionRay = new Ray(new Vector2f(x, y), (float)rotation, 1f, 0.5f, Ray.Type.ENTITY);
 
         // TODO rewrite the collision system for the new object system
-//        if(Keyboard.isKeyDown(KeyEvent.VK_W)) {
-//            if(coordinates.y - mv > 0) {
+        if(Keyboard.isKeyDown(KeyEvent.VK_W)) {
+            if(y - mv > 0) {
 //                boolean flag = false;
 //
 //                Rectangle2D.Float playerRect = new Rectangle2D.Float((coordinates.x * TILE_WIDTH) + collisionBox.x,
@@ -166,15 +165,15 @@ public class PlayerEntity extends EntityObject {
 //                }
 //
 //                if(!flag) {
-//                    coordinates.y -= mv;
+                    y -= mv;
 //                }
-//            } else {
-//                coordinates.y = 0;
-//            }
-//        }
+            } else {
+                y = 0;
+            }
+        }
 //
-//        if(Keyboard.isKeyDown(KeyEvent.VK_S)) {
-//            if((coordinates.y * TILE_HEIGHT) + TILE_HEIGHT + mv < (parent.height * TILE_HEIGHT)) {
+        if(Keyboard.isKeyDown(KeyEvent.VK_S)) {
+            if(y + height + mv < parent.height) {
 //                boolean flag = false;
 //
 //                Rectangle2D.Float playerRect = new Rectangle2D.Float((coordinates.x * TILE_WIDTH) + collisionBox.x,
@@ -207,15 +206,15 @@ public class PlayerEntity extends EntityObject {
 //                }
 //
 //                if(!flag) {
-//                    coordinates.y += mv;
+                    y += mv;
 //                }
-//            } else {
-//                coordinates.y = parent.height - 1;
-//            }
-//        }
+            } else {
+                y = parent.height - 1;
+            }
+        }
 //
-//        if(Keyboard.isKeyDown(KeyEvent.VK_A)) {
-//            if(coordinates.x - mv > 0) {
+        if(Keyboard.isKeyDown(KeyEvent.VK_A)) {
+            if(x - mv > 0) {
 //                boolean flag = false;
 //
 //                Rectangle2D.Float playerRect = new Rectangle2D.Float((coordinates.x * TILE_WIDTH) + collisionBox.x - (float)mv * 5,
@@ -248,15 +247,15 @@ public class PlayerEntity extends EntityObject {
 //                }
 //
 //                if(!flag) {
-//                    coordinates.x -= mv;
+                    x -= mv;
 //                }
-//            } else {
-//                coordinates.x = 0;
-//            }
-//        }
+            } else {
+                x = 0;
+            }
+        }
 //
-//        if(Keyboard.isKeyDown(KeyEvent.VK_D)) {
-//            if((coordinates.x * TILE_WIDTH) + TILE_WIDTH + mv < (parent.width * TILE_WIDTH)) {
+        if(Keyboard.isKeyDown(KeyEvent.VK_D)) {
+            if(x + width + mv < parent.width) {
 //                boolean flag = false;
 //
 //                Rectangle2D.Float playerRect = new Rectangle2D.Float((coordinates.x * TILE_WIDTH) + collisionBox.x + (float)mv * 5,
@@ -289,19 +288,19 @@ public class PlayerEntity extends EntityObject {
 //                }
 //
 //                if(!flag) {
-//                    coordinates.x += mv;
+                    x += mv;
 //                }
-//            } else {
-//                coordinates.x = parent.width - 1;
-//            }
-//        }
+            } else {
+                x = parent.width - 1;
+            }
+        }
 
         if(Keyboard.wasKeyClicked(KeyEvent.VK_E)) {
             if(entitySelectionRay != null) {
                 if(entitySelectionRay.getResult() != null) {
-                    Entity entity = (Entity) entitySelectionRay.getResult();
+                    EntityObject entity = (EntityObject) entitySelectionRay.getResult();
 
-                    if(entity.canInteract) {
+                    if(entity.interactable) {
                         entity.interact();
                         return;
                     }
@@ -310,9 +309,9 @@ public class PlayerEntity extends EntityObject {
 
             if(blockSelectionRay != null) {
                 if(blockSelectionRay.getResult() != null) {
-                    Block block = (Block) blockSelectionRay.getResult();
+                    BlockObject block = (BlockObject) blockSelectionRay.getResult();
 
-                    if(block.canInteract) {
+                    if(block.interactable) {
                         block.interact();
                     }
                 }

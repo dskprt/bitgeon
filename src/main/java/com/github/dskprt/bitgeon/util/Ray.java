@@ -1,14 +1,14 @@
 package com.github.dskprt.bitgeon.util;
 
 import com.github.dskprt.bitgeon.BitgeonGame;
-import com.github.dskprt.bitgeon.tile.Tile;
+import com.github.dskprt.bitgeon.object.GameObject;
 
 import javax.vecmath.Vector2f;
 
 public class Ray {
 
     public Vector2f finish;
-    private Tile result;
+    private GameObject result;
 
     public Ray(Vector2f coordinates, float direction, float length, float step, Type type) {
         this(coordinates, direction, length, step, type, true);
@@ -21,22 +21,22 @@ public class Ray {
         this.finish = new Vector2f((float)(coordinates.x + (length * cos)),
                 (float)(coordinates.y + (length * sin)));
 
-        Tile tile = null;
+        GameObject object = null;
 
         switch(type) {
             case BLOCK:
-                tile = BitgeonGame.INSTANCE.level.getBlockAt(Math.round(finish.x), Math.round(finish.y));
+                object = BitgeonGame.INSTANCE.level.getBlockAt(Math.round(finish.x), Math.round(finish.y));
                 break;
             case ENTITY:
-                tile = BitgeonGame.INSTANCE.level.getEntityAt(Math.round(finish.x), Math.round(finish.y));
+                object = BitgeonGame.INSTANCE.level.getEntityAt(Math.round(finish.x), Math.round(finish.y));
                 break;
         }
 
-        if(tile != null) {
-            if(tile.canCollide) {
-                result = tile;
+        if(object != null) {
+            if(object.collisions != null) {
+                result = object;
             } else if(!ignoreEmpty) {
-                result = tile;
+                result = object;
             }
         }
 
@@ -46,23 +46,23 @@ public class Ray {
 
             switch(type) {
                 case BLOCK:
-                    tile = BitgeonGame.INSTANCE.level.getBlockAt(Math.round(vec.x), Math.round(vec.y));
+                    object = BitgeonGame.INSTANCE.level.getBlockAt(Math.round(vec.x), Math.round(vec.y));
                     break;
                 case ENTITY:
-                    tile = BitgeonGame.INSTANCE.level.getEntityAt(Math.round(vec.x), Math.round(vec.y));
+                    object = BitgeonGame.INSTANCE.level.getEntityAt(Math.round(vec.x), Math.round(vec.y));
                     break;
             }
 
-            if(tile != null) {
-                if(tile.canCollide) {
-                    result = tile;
+            if(object != null) {
+                if(object.collisions != null) {
+                    result = object;
                     break;
                 }
             }
         }
     }
 
-    public Tile getResult() {
+    public GameObject getResult() {
         return result;
     }
 

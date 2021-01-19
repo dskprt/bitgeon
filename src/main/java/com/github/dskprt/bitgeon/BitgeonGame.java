@@ -5,7 +5,6 @@ import com.github.dskprt.bitgeon.gui.Screen;
 import com.github.dskprt.bitgeon.gui.screens.TitleScreen;
 import com.github.dskprt.bitgeon.input.Keyboard;
 import com.github.dskprt.bitgeon.input.Mouse;
-import com.github.dskprt.bitgeon.tile.Tile;
 import com.github.dskprt.bitgeon.level.Level;
 import com.github.dskprt.bitgeon.util.GameState;
 import com.github.dskprt.bitgeon.util.Timer;

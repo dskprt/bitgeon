@@ -68,7 +68,7 @@ public class TitleScreen extends Screen {
             switch(selection) {
                 case 0:
                     System.out.println("Play");
-                    BitgeonGame.INSTANCE.loadLevel("collisions.jmap");
+                    BitgeonGame.INSTANCE.loadLevel("map.jmap");
                     break;
                 case 1:
                     System.out.println("Options");

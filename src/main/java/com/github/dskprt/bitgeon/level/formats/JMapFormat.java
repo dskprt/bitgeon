@@ -4,7 +4,7 @@ import com.github.dskprt.bitgeon.BitgeonGame;
 import com.github.dskprt.bitgeon.gui.screens.LevelLoadingScreen;
 import com.github.dskprt.bitgeon.level.LevelFormat;
 import com.github.dskprt.bitgeon.level.Level;
-import com.github.dskprt.bitgeon.tile.TileRepository;
+import com.github.dskprt.bitgeon.object.GameObjectRepository;
 import com.github.dskprt.bitgeon.util.GZipUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -51,44 +51,48 @@ public class JMapFormat extends LevelFormat {
                 int spawnX = json.getInt("x");
                 int spawnY = json.getInt("y");
 
-                map = new Level(levelName, width, height, new Vector2f(spawnX, spawnY));
+                map = new Level(levelName, width, height, spawnX, spawnY, 0);
 
-                JSONArray blocks = json.getJSONArray("b");
-                blockCount = blocks.length();
+                if(json.has("b")) {
+                    JSONArray blocks = json.getJSONArray("b");
+                    blockCount = blocks.length();
 
-                state = State.LOADING_BLOCKS;
+                    state = State.LOADING_BLOCKS;
 
-                for(int i = 0; i < blocks.length(); i++) {
-                    JSONObject block = blocks.getJSONObject(i);
+                    for(int i = 0; i < blocks.length(); i++) {
+                        JSONObject block = blocks.getJSONObject(i);
 
-                    String id = block.getString("i");
-                    int x = block.getInt("x");
-                    int y = block.getInt("y");
-                    byte data = (byte) block.getInt("d");
+                        String id = block.getString("i");
+                        int x = block.getInt("x");
+                        int y = block.getInt("y");
+                        byte data = (byte) block.getInt("d");
 
-                    int index = (y * width) + x;
+                        int index = (y * width) + x;
 
-                    map.blocks.set(index, TileRepository.createBlockFromId(map, id, new Vector2f(x, y), data));
-                    blocksLoaded++;
+                        map.blocks.add(GameObjectRepository.createBlockFromId(map, id, x, y, 0, data));
+                        blocksLoaded++;
+                    }
                 }
 
-                JSONArray entities = json.getJSONArray("e");
-                entityCount = entities.length();
+                if(json.has("e")) {
+                    JSONArray entities = json.getJSONArray("e");
+                    entityCount = entities.length();
 
-                state = State.LOADING_ENTITIES;
+                    state = State.LOADING_ENTITIES;
 
-                for(int i = 0; i < entities.length(); i++) {
-                    JSONObject entity = entities.getJSONObject(i);
+                    for(int i = 0; i < entities.length(); i++) {
+                        JSONObject entity = entities.getJSONObject(i);
 
-                    String id = entity.getString("i");
-                    int x = entity.getInt("x");
-                    int y = entity.getInt("y");
-                    byte data = (byte) entity.getInt("d");
+                        String id = entity.getString("i");
+                        int x = entity.getInt("x");
+                        int y = entity.getInt("y");
+                        byte data = (byte) entity.getInt("d");
 
-                    int index = (y * width) + x;
+                        int index = (y * width) + x;
 
-                    map.entities.set(index, TileRepository.createEntityFromId(map, id, new Vector2f(x, y), data));
-                    entitiesLoaded++;
+                        map.entities.add(GameObjectRepository.createEntityFromId(map, id, x, y, 0, data));
+                        entitiesLoaded++;
+                    }
                 }
 
                 state = State.FINISHED;

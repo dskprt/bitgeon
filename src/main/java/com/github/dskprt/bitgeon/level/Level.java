@@ -5,7 +5,6 @@ import com.github.dskprt.bitgeon.level.formats.JMapFormat;
 import com.github.dskprt.bitgeon.object.GameObject;
 import com.github.dskprt.bitgeon.object.block.BlockObject;
 import com.github.dskprt.bitgeon.object.entity.EntityObject;
-import com.github.dskprt.bitgeon.tile.Tile;
 import com.github.dskprt.bitgeon.object.entity.entities.PlayerEntity;
 
 import java.awt.*;
@@ -58,7 +57,7 @@ public class Level {
                 double screenX = offsetX + block.x;
                 double screenY = offsetY + block.y;
 
-                if(screenX + Tile.TILE_WIDTH < 0 || screenY + Tile.TILE_HEIGHT < 0
+                if(screenX + block.width < 0 || screenY + block.height < 0
                         || screenX > BitgeonGame.WIDTH || screenY > BitgeonGame.HEIGHT) continue;
 
                 block.render(g2d);
@@ -72,7 +71,7 @@ public class Level {
                 double screenX = offsetX + entity.x;
                 double screenY = offsetY + entity.y;
 
-                if(screenX + Tile.TILE_WIDTH < 0 || screenY + Tile.TILE_HEIGHT < 0
+                if(screenX + entity.width < 0 || screenY + entity.height < 0
                         || screenX > BitgeonGame.WIDTH || screenY > BitgeonGame.HEIGHT) continue;
 
                 entity.render(g2d);

@@ -5,10 +5,7 @@ import com.github.dskprt.bitgeon.input.Mouse;
 import com.github.dskprt.bitgeon.object.GameObject;
 import com.github.dskprt.bitgeon.object.block.BlockObject;
 import com.github.dskprt.bitgeon.object.entity.EntityObject;
-import com.github.dskprt.bitgeon.tile.Tile;
 import com.github.dskprt.bitgeon.level.Level;
-import com.github.dskprt.bitgeon.object.block.blocks.GrassBlock;
-import com.github.dskprt.bitgeon.tile.entity.Entity;
 
 import javax.vecmath.Vector2f;
 import java.awt.geom.Rectangle2D;
